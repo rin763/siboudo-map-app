@@ -611,7 +611,7 @@ export default class extends Controller {
               <span class="sub">正解はありません。あなた自身の言葉で意味づけしてください。</span>
             </label>
           </div>
-          <div class="field-box"><textarea class="meaning" data-role="meaning" placeholder="つまり自分には◯◯という欲求があり、◯◯という意思決定の軸がある／自分は〇〇を大切にしている。">${this.escapeHtml(pt.meaning)}</textarea></div>
+          <div class="field-box"><textarea class="meaning" data-role="meaning" placeholder="つまり自分には〇〇という欲求がある／自分は〇〇よりも〇〇を大切にしている。">${this.escapeHtml(pt.meaning)}</textarea></div>
         </div>
 
         <div class="panel-save">
