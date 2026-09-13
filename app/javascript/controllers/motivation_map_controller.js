@@ -3,14 +3,9 @@ import { Controller } from "@hotwired/stimulus"
 // 赤系パレット。company.color_index (サーバー側で作成順に割り当て) と
 // インデックスを揃えている。app/models/company.rb の PALETTE と対応。
 const PALETTE = [
-  { main: "#C0392B", soft: "#F7DAD5" },
-  { main: "#E4573F", soft: "#FBE2DC" },
-  { main: "#A93226", soft: "#F3D7D1" },
-  { main: "#D96E5B", soft: "#F8E2DB" },
-  { main: "#8E2E23", soft: "#EFD5CF" },
-  { main: "#E28F7C", soft: "#FBEAE5" },
-  { main: "#B33F32", soft: "#F5DBD5" },
-  { main: "#C97A63", soft: "#F6E4DC" }
+  { main: "#293767", soft: "#E0E2E8" },
+  { main: "#4A5EA3", soft: "#E5E7F4" },
+  { main: "#8B9EE0", soft: "#EDF0FA" }
 ]
 
 const COMPANIES_URL = "/companies"
@@ -125,11 +120,11 @@ export default class extends Controller {
   colorFor(company){
     return PALETTE[company.color_index % PALETTE.length]
   }
-  // グラフ上では、選択中（activeCompanyId）の企業だけ本来の色で表示し、
-  // それ以外の企業の線・点・企業名はグレー(#5B403C)で控えめに表示する
+  // グラフ上では、選択中（activeCompanyId）の企業だけポイントカラー(#FE8769)で強調表示し、
+  // それ以外の企業の線・点・企業名は#4A5EA3で控えめに表示する
   graphColorFor(company){
-    if(company.id === this.activeCompanyId) return { main: "#B51D13", soft: "#B51D131a" }
-    return { main: "#5B403C", soft: "#5B403C1a" }
+    if(company.id === this.activeCompanyId) return { main: "#FE8769", soft: "#FE87691a" }
+    return { main: "#4A5EA3", soft: "#4A5EA31a" }
   }
   companyOf(pt){
     return this.companies.find(c => c.id === pt.company_id)
@@ -561,7 +556,7 @@ export default class extends Controller {
     // }
 
     const company = this.companyOf(pt)
-    const color = company ? this.colorFor(company) : { main: "#B51D13" }
+    const color = company ? this.colorFor(company) : { main: "#FE8769" }
     const sorted = this.points.filter(p => p.company_id === pt.company_id).sort((a, b) => a.x - b.x)
     const idx = sorted.findIndex(p => p.id === pt.id) + 1
 
