@@ -541,19 +541,19 @@ export default class extends Controller {
     const panel = this.panelTarget
     const pt = this.points.find(p => p.id === this.selectedId)
 
-    // if(!pt){
-    //   panel.innerHTML = this.companies.length
-    //     ? `<div class="panel"><div class="panel-empty">
-    //          上の企業チップを選び、グラフをクリックするとその企業の線にポイントが追加されます。<br><br>
-    //          追加したポイントをクリックすると、ここに②〜⑤の質問が表示されます（②〜④はグラフ上の付箋にも反映されます）。
-    //        </div></div>`
-    //     : `<div class="panel"><div class="panel-empty">
-    //          まだ企業がありません。<br><br>
-    //          上の「＋企業を追加」から、比較したい企業を追加してください。企業ごとに色分けされた線で、順位や魅力度の推移を描けます。<br><br>
-    //          「今の第一志望群でなくても、魅力を感じていたが辞退した会社」を追加しても構いません。
-    //        </div></div>`
-    //   return
-    // }
+    if(!pt){
+      panel.innerHTML = this.companies.length
+        ? `<div class="panel"><div class="panel-empty">
+             上の企業チップを選び、グラフをクリックするとその企業の線にポイントが追加されます。<br><br>
+             追加したポイントをクリックすると、ここに②〜⑤の質問が表示されます（②〜④はグラフ上の付箋にも反映されます）。
+           </div></div>`
+        : `<div class="panel"><div class="panel-empty">
+             まだ企業がありません。<br><br>
+             上の「＋企業を追加」から、比較したい企業を追加してください。企業ごとに色分けされた線で、順位や魅力度の推移を描けます。<br><br>
+             「今の第一志望群でなくても、魅力を感じていたが辞退した会社」を追加しても構いません。
+           </div></div>`
+      return
+    }
 
     const company = this.companyOf(pt)
     const color = company ? this.colorFor(company) : { main: "#FE8769" }
@@ -581,10 +581,9 @@ export default class extends Controller {
           <div class="field-head">
             <span class="q-num">②</span>
             <label>何があったか
-              <span class="sub">説明会、面談、口コミを見た、友人と話した、など</span>
             </label>
           </div>
-          <div class="field-box"><textarea data-role="what" placeholder="何があったか">${this.escapeHtml(pt.what)}</textarea></div>
+          <div class="field-box"><textarea data-role="what" placeholder="例：説明会、面談、口コミを見た、友人と話した、など">${this.escapeHtml(pt.what)}</textarea></div>
         </div>
 
         <div class="field">
@@ -592,7 +591,7 @@ export default class extends Controller {
             <span class="q-num">③</span>
             <label>どんな情報を受け取ったか</label>
           </div>
-          <div class="field-box"><textarea data-role="info" placeholder="受け取った情報の内容">${this.escapeHtml(pt.info)}</textarea></div>
+          <div class="field-box"><textarea data-role="info" placeholder="例：社員の雰囲気、面接官の熱量">${this.escapeHtml(pt.info)}</textarea></div>
         </div>
 
         <div class="field">
