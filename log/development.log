@@ -1,0 +1,2430 @@
+  [1m[35m (5.4ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" varchar NOT NULL PRIMARY KEY)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" varchar NOT NULL PRIMARY KEY, "value" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[36mActiveRecord::InternalMetadata Create (0.1ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ('environment', 'development', '2026-09-12 15:20:49.646010', '2026-09-12 15:20:49.646012') RETURNING "key"[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to CreateCompanies (20260912000001)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.6ms)[0m  [1m[35mCREATE TABLE "companies" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar NOT NULL, "color_index" integer DEFAULT 0 NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.0ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20260912000001') RETURNING "version"[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreatePoints (20260912000002)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.5ms)[0m  [1m[35mCREATE TABLE "points" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "company_id" integer NOT NULL, "x" float NOT NULL, "y" float NOT NULL, "what" text, "info" text, "emotion" text, "meaning" text, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_54bd25c9a8"
+FOREIGN KEY ("company_id")
+  REFERENCES "companies" ("id")
+)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_points_on_company_id" ON "points" ("company_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.0ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20260912000002') RETURNING "version"[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Started GET "/" for ::1 at 2026-09-13 00:20:56 +0900
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by MapController#show as */*
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.1ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 3.0ms | GC: 0.1ms)
+  Rendered layout layouts/application.html.erb (Duration: 3.1ms | GC: 0.1ms)
+Completed 500 Internal Server Error in 66ms (ActiveRecord: 1.2ms (1 query, 0 cached) | GC: 10.7ms)
+
+
+  
+ActionView::Template::Error (unknown keyword: quirks_mode):
+
+Causes:
+ArgumentError (unknown keyword: quirks_mode)
+    1: <div class="app"
+    2:      data-controller="motivation-map"
+    3:      data-motivation-map-companies-value="<%= @companies.map(&:as_json_for_client).to_json %>"
+    4:      data-motivation-map-points-value="<%= @points.map(&:as_json_for_client).to_json %>">
+    5: 
+    6:   <header class="title">
+  
+app/views/map/show.html.erb:3
+Started GET "/" for ::1 at 2026-09-13 00:22:29 +0900
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by MapController#show as */*
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.2ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.0ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 1.5ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 215.2ms | GC: 69.9ms)
+Completed 200 OK in 236ms (Views: 216.8ms | ActiveRecord: 1.3ms (2 queries, 0 cached) | GC: 69.9ms)
+
+
+Started GET "/" for ::1 at 2026-09-13 00:22:34 +0900
+Processing by MapController#show as */*
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.1ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.0ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 1.4ms | GC: 0.1ms)
+  Rendered layout layouts/application.html.erb (Duration: 2.8ms | GC: 0.1ms)
+Completed 200 OK in 4ms (Views: 3.0ms | ActiveRecord: 0.1ms (2 queries, 0 cached) | GC: 0.1ms)
+
+
+Started POST "/companies" for ::1 at 2026-09-13 00:22:34 +0900
+Processing by CompaniesController#create as JSON
+  Parameters: {"company"=>{"name"=>"テスト企業"}}
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/models/company.rb:32:in `assign_color_index'
+  [1m[36mCompany Count (0.6ms)[0m  [1m[34mSELECT COUNT(*) FROM "companies"[0m
+  ↳ app/models/company.rb:32:in `assign_color_index'
+  [1m[36mCompany Create (0.5ms)[0m  [1m[32mINSERT INTO "companies" ("name", "color_index", "created_at", "updated_at") VALUES (?, ?, ?, ?) RETURNING "id"[0m  [["name", "テスト企業"], ["color_index", 0], ["created_at", "2026-09-12 15:22:34.985229"], ["updated_at", "2026-09-12 15:22:34.985229"]]
+  ↳ app/controllers/companies_controller.rb:4:in `create'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/companies_controller.rb:4:in `create'
+Completed 201 Created in 11ms (Views: 0.1ms | ActiveRecord: 1.5ms (2 queries, 0 cached) | GC: 0.5ms)
+
+
+  [1m[36mCompany Load (1.6ms)[0m  [1m[34mSELECT "companies".* FROM "companies"[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mPoint Load (0.2ms)[0m  [1m[34mSELECT "points".* FROM "points" WHERE "points"."company_id" = ?[0m  [["company_id", 1]]
+  [1m[36mCompany Destroy (0.3ms)[0m  [1m[31mDELETE FROM "companies" WHERE "companies"."id" = ?[0m  [["id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mcommit transaction[0m
+Started GET "/" for 127.0.0.1 at 2026-09-13 00:29:49 +0900
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.3ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 2.2ms | GC: 0.1ms)
+  Rendered layout layouts/application.html.erb (Duration: 31.8ms | GC: 0.2ms)
+Completed 200 OK in 61ms (Views: 33.8ms | ActiveRecord: 1.9ms (2 queries, 0 cached) | GC: 1.3ms)
+
+
+Started GET "/manifest.json" for 127.0.0.1 at 2026-09-13 00:29:49 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for 127.0.0.1 at 2026-09-13 12:01:45 +0900
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.3ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.0ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 1.8ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 59.5ms | GC: 0.0ms)
+Completed 200 OK in 90ms (Views: 61.8ms | ActiveRecord: 1.7ms (2 queries, 0 cached) | GC: 1.0ms)
+
+
+Started GET "/manifest.json" for 127.0.0.1 at 2026-09-13 12:01:45 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for ::1 at 2026-09-13 12:57:17 +0900
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by MapController#show as */*
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.2ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.0ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 1.7ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 56.7ms | GC: 0.2ms)
+Completed 200 OK in 85ms (Views: 58.9ms | ActiveRecord: 1.4ms (2 queries, 0 cached) | GC: 1.1ms)
+
+
+Started GET "/" for ::1 at 2026-09-13 12:58:51 +0900
+Processing by MapController#show as */*
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (2.3ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.0ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 5.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 13.7ms | GC: 0.0ms)
+Completed 200 OK in 16ms (Views: 12.0ms | ActiveRecord: 2.3ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started POST "/companies" for ::1 at 2026-09-13 12:58:51 +0900
+Processing by CompaniesController#create as JSON
+  Parameters: {"company"=>{"name"=>"A社 SmartTech"}}
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/models/company.rb:32:in `assign_color_index'
+  [1m[36mCompany Count (0.7ms)[0m  [1m[34mSELECT COUNT(*) FROM "companies"[0m
+  ↳ app/models/company.rb:32:in `assign_color_index'
+  [1m[36mCompany Create (0.3ms)[0m  [1m[32mINSERT INTO "companies" ("name", "color_index", "created_at", "updated_at") VALUES (?, ?, ?, ?) RETURNING "id"[0m  [["name", "A社 SmartTech"], ["color_index", 0], ["created_at", "2026-09-13 03:58:51.704111"], ["updated_at", "2026-09-13 03:58:51.704111"]]
+  ↳ app/controllers/companies_controller.rb:4:in `create'
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/companies_controller.rb:4:in `create'
+Completed 201 Created in 23ms (Views: 0.1ms | ActiveRecord: 8.1ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started POST "/companies" for ::1 at 2026-09-13 12:58:51 +0900
+Processing by CompaniesController#create as JSON
+  Parameters: {"company"=>{"name"=>"B社 Future Horizon"}}
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/models/company.rb:32:in `assign_color_index'
+  [1m[36mCompany Count (0.4ms)[0m  [1m[34mSELECT COUNT(*) FROM "companies"[0m
+  ↳ app/models/company.rb:32:in `assign_color_index'
+  [1m[36mCompany Create (0.1ms)[0m  [1m[32mINSERT INTO "companies" ("name", "color_index", "created_at", "updated_at") VALUES (?, ?, ?, ?) RETURNING "id"[0m  [["name", "B社 Future Horizon"], ["color_index", 1], ["created_at", "2026-09-13 03:58:51.725003"], ["updated_at", "2026-09-13 03:58:51.725003"]]
+  ↳ app/controllers/companies_controller.rb:4:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/companies_controller.rb:4:in `create'
+Completed 201 Created in 3ms (Views: 0.1ms | ActiveRecord: 0.6ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started POST "/points" for ::1 at 2026-09-13 12:58:52 +0900
+Processing by PointsController#create as JSON
+  Parameters: {"company_id"=>2, "x"=>0.1, "y"=>0.5, "what"=>"説明会に参加", "emotion"=>"少し安心した", "meaning"=>"チームの雰囲気が合いそう", "point"=>{"company_id"=>2, "x"=>0.1, "y"=>0.5, "what"=>"説明会に参加", "emotion"=>"少し安心した", "meaning"=>"チームの雰囲気が合いそう"}}
+[31mUnpermitted parameter: :point. Context: { controller: PointsController, action: create, request: #<ActionDispatch::Request:0x000000010a7fb7e0>, params: {"company_id"=>2, "x"=>0.1, "y"=>0.5, "what"=>"説明会に参加", "emotion"=>"少し安心した", "meaning"=>"チームの雰囲気が合いそう", "controller"=>"points", "action"=>"create", "point"=>{"company_id"=>2, "x"=>0.1, "y"=>0.5, "what"=>"説明会に参加", "emotion"=>"少し安心した", "meaning"=>"チームの雰囲気が合いそう"}} }[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mCompany Load (0.7ms)[0m  [1m[34mSELECT "companies".* FROM "companies" WHERE "companies"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mPoint Create (0.3ms)[0m  [1m[32mINSERT INTO "points" ("company_id", "x", "y", "what", "info", "emotion", "meaning", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["company_id", 2], ["x", 0.1], ["y", 0.5], ["what", "説明会に参加"], ["info", nil], ["emotion", "少し安心した"], ["meaning", "チームの雰囲気が合いそう"], ["created_at", "2026-09-13 03:58:52.070406"], ["updated_at", "2026-09-13 03:58:52.070406"]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+Completed 201 Created in 16ms (Views: 0.1ms | ActiveRecord: 1.2ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started POST "/points" for ::1 at 2026-09-13 12:58:52 +0900
+Processing by PointsController#create as JSON
+  Parameters: {"company_id"=>2, "x"=>0.4, "y"=>0.4, "what"=>"説明会に参加", "emotion"=>"少し安心した", "meaning"=>"チームの雰囲気が合いそう", "point"=>{"company_id"=>2, "x"=>0.4, "y"=>0.4, "what"=>"説明会に参加", "emotion"=>"少し安心した", "meaning"=>"チームの雰囲気が合いそう"}}
+[31mUnpermitted parameter: :point. Context: { controller: PointsController, action: create, request: #<ActionDispatch::Request:0x000000010a940538>, params: {"company_id"=>2, "x"=>0.4, "y"=>0.4, "what"=>"説明会に参加", "emotion"=>"少し安心した", "meaning"=>"チームの雰囲気が合いそう", "controller"=>"points", "action"=>"create", "point"=>{"company_id"=>2, "x"=>0.4, "y"=>0.4, "what"=>"説明会に参加", "emotion"=>"少し安心した", "meaning"=>"チームの雰囲気が合いそう"}} }[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mCompany Load (0.6ms)[0m  [1m[34mSELECT "companies".* FROM "companies" WHERE "companies"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mPoint Create (0.1ms)[0m  [1m[32mINSERT INTO "points" ("company_id", "x", "y", "what", "info", "emotion", "meaning", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["company_id", 2], ["x", 0.4], ["y", 0.4], ["what", "説明会に参加"], ["info", nil], ["emotion", "少し安心した"], ["meaning", "チームの雰囲気が合いそう"], ["created_at", "2026-09-13 03:58:52.098417"], ["updated_at", "2026-09-13 03:58:52.098417"]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+Completed 201 Created in 3ms (Views: 0.1ms | ActiveRecord: 0.7ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started POST "/points" for ::1 at 2026-09-13 12:58:52 +0900
+Processing by PointsController#create as JSON
+  Parameters: {"company_id"=>2, "x"=>0.7, "y"=>0.8, "what"=>"説明会に参加", "emotion"=>"少し安心した", "meaning"=>"チームの雰囲気が合いそう", "point"=>{"company_id"=>2, "x"=>0.7, "y"=>0.8, "what"=>"説明会に参加", "emotion"=>"少し安心した", "meaning"=>"チームの雰囲気が合いそう"}}
+[31mUnpermitted parameter: :point. Context: { controller: PointsController, action: create, request: #<ActionDispatch::Request:0x000000010a9a8318>, params: {"company_id"=>2, "x"=>0.7, "y"=>0.8, "what"=>"説明会に参加", "emotion"=>"少し安心した", "meaning"=>"チームの雰囲気が合いそう", "controller"=>"points", "action"=>"create", "point"=>{"company_id"=>2, "x"=>0.7, "y"=>0.8, "what"=>"説明会に参加", "emotion"=>"少し安心した", "meaning"=>"チームの雰囲気が合いそう"}} }[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mCompany Load (0.8ms)[0m  [1m[34mSELECT "companies".* FROM "companies" WHERE "companies"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mPoint Create (0.1ms)[0m  [1m[32mINSERT INTO "points" ("company_id", "x", "y", "what", "info", "emotion", "meaning", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["company_id", 2], ["x", 0.7], ["y", 0.8], ["what", "説明会に参加"], ["info", nil], ["emotion", "少し安心した"], ["meaning", "チームの雰囲気が合いそう"], ["created_at", "2026-09-13 03:58:52.125169"], ["updated_at", "2026-09-13 03:58:52.125169"]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+Completed 201 Created in 4ms (Views: 0.1ms | ActiveRecord: 1.0ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started POST "/points" for ::1 at 2026-09-13 12:58:52 +0900
+Processing by PointsController#create as JSON
+  Parameters: {"company_id"=>2, "x"=>0.9, "y"=>0.85, "what"=>"説明会に参加", "emotion"=>"少し安心した", "meaning"=>"チームの雰囲気が合いそう", "point"=>{"company_id"=>2, "x"=>0.9, "y"=>0.85, "what"=>"説明会に参加", "emotion"=>"少し安心した", "meaning"=>"チームの雰囲気が合いそう"}}
+[31mUnpermitted parameter: :point. Context: { controller: PointsController, action: create, request: #<ActionDispatch::Request:0x0000000109190eb0>, params: {"company_id"=>2, "x"=>0.9, "y"=>0.85, "what"=>"説明会に参加", "emotion"=>"少し安心した", "meaning"=>"チームの雰囲気が合いそう", "controller"=>"points", "action"=>"create", "point"=>{"company_id"=>2, "x"=>0.9, "y"=>0.85, "what"=>"説明会に参加", "emotion"=>"少し安心した", "meaning"=>"チームの雰囲気が合いそう"}} }[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mCompany Load (1.3ms)[0m  [1m[34mSELECT "companies".* FROM "companies" WHERE "companies"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mPoint Create (0.1ms)[0m  [1m[32mINSERT INTO "points" ("company_id", "x", "y", "what", "info", "emotion", "meaning", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["company_id", 2], ["x", 0.9], ["y", 0.85], ["what", "説明会に参加"], ["info", nil], ["emotion", "少し安心した"], ["meaning", "チームの雰囲気が合いそう"], ["created_at", "2026-09-13 03:58:52.172878"], ["updated_at", "2026-09-13 03:58:52.172878"]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+Completed 201 Created in 5ms (Views: 0.1ms | ActiveRecord: 1.5ms (2 queries, 0 cached) | GC: 0.5ms)
+
+
+Started POST "/points" for ::1 at 2026-09-13 12:58:52 +0900
+Processing by PointsController#create as JSON
+  Parameters: {"company_id"=>3, "x"=>0.1, "y"=>0.8, "point"=>{"company_id"=>3, "x"=>0.1, "y"=>0.8}}
+[31mUnpermitted parameter: :point. Context: { controller: PointsController, action: create, request: #<ActionDispatch::Request:0x0000000109acbb88>, params: {"company_id"=>3, "x"=>0.1, "y"=>0.8, "controller"=>"points", "action"=>"create", "point"=>{"company_id"=>3, "x"=>0.1, "y"=>0.8}} }[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mCompany Load (0.8ms)[0m  [1m[34mSELECT "companies".* FROM "companies" WHERE "companies"."id" = ? LIMIT ?[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mPoint Create (0.1ms)[0m  [1m[32mINSERT INTO "points" ("company_id", "x", "y", "what", "info", "emotion", "meaning", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["company_id", 3], ["x", 0.1], ["y", 0.8], ["what", nil], ["info", nil], ["emotion", nil], ["meaning", nil], ["created_at", "2026-09-13 03:58:52.205220"], ["updated_at", "2026-09-13 03:58:52.205220"]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+Completed 201 Created in 5ms (Views: 0.1ms | ActiveRecord: 1.0ms (2 queries, 0 cached) | GC: 0.7ms)
+
+
+Started POST "/points" for ::1 at 2026-09-13 12:58:52 +0900
+Processing by PointsController#create as JSON
+  Parameters: {"company_id"=>3, "x"=>0.4, "y"=>0.7, "point"=>{"company_id"=>3, "x"=>0.4, "y"=>0.7}}
+[31mUnpermitted parameter: :point. Context: { controller: PointsController, action: create, request: #<ActionDispatch::Request:0x000000010a208680>, params: {"company_id"=>3, "x"=>0.4, "y"=>0.7, "controller"=>"points", "action"=>"create", "point"=>{"company_id"=>3, "x"=>0.4, "y"=>0.7}} }[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mCompany Load (0.8ms)[0m  [1m[34mSELECT "companies".* FROM "companies" WHERE "companies"."id" = ? LIMIT ?[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mPoint Create (0.1ms)[0m  [1m[32mINSERT INTO "points" ("company_id", "x", "y", "what", "info", "emotion", "meaning", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["company_id", 3], ["x", 0.4], ["y", 0.7], ["what", nil], ["info", nil], ["emotion", nil], ["meaning", nil], ["created_at", "2026-09-13 03:58:52.234657"], ["updated_at", "2026-09-13 03:58:52.234657"]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+Completed 201 Created in 4ms (Views: 0.1ms | ActiveRecord: 1.0ms (2 queries, 0 cached) | GC: 0.3ms)
+
+
+Started POST "/points" for ::1 at 2026-09-13 12:58:52 +0900
+Processing by PointsController#create as JSON
+  Parameters: {"company_id"=>3, "x"=>0.7, "y"=>0.3, "point"=>{"company_id"=>3, "x"=>0.7, "y"=>0.3}}
+[31mUnpermitted parameter: :point. Context: { controller: PointsController, action: create, request: #<ActionDispatch::Request:0x000000010a319fb0>, params: {"company_id"=>3, "x"=>0.7, "y"=>0.3, "controller"=>"points", "action"=>"create", "point"=>{"company_id"=>3, "x"=>0.7, "y"=>0.3}} }[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mCompany Load (0.9ms)[0m  [1m[34mSELECT "companies".* FROM "companies" WHERE "companies"."id" = ? LIMIT ?[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mPoint Create (0.1ms)[0m  [1m[32mINSERT INTO "points" ("company_id", "x", "y", "what", "info", "emotion", "meaning", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["company_id", 3], ["x", 0.7], ["y", 0.3], ["what", nil], ["info", nil], ["emotion", nil], ["meaning", nil], ["created_at", "2026-09-13 03:58:52.262550"], ["updated_at", "2026-09-13 03:58:52.262550"]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+Completed 201 Created in 4ms (Views: 0.1ms | ActiveRecord: 1.1ms (2 queries, 0 cached) | GC: 0.6ms)
+
+
+Started GET "/" for ::1 at 2026-09-13 12:59:02 +0900
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.9ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.0ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 3.9ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 5.5ms | GC: 0.1ms)
+Completed 200 OK in 6ms (Views: 4.8ms | ActiveRecord: 0.9ms (2 queries, 0 cached) | GC: 0.1ms)
+
+
+Started GET "/manifest.json" for ::1 at 2026-09-13 12:59:02 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/manifest.json" for ::1 at 2026-09-13 12:59:02 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for ::1 at 2026-09-13 12:59:54 +0900
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.2ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 5.0ms | GC: 0.3ms)
+  Rendered layout layouts/application.html.erb (Duration: 8.6ms | GC: 0.7ms)
+Completed 200 OK in 11ms (Views: 8.9ms | ActiveRecord: 0.3ms (2 queries, 0 cached) | GC: 0.7ms)
+
+
+Started GET "/manifest.json" for ::1 at 2026-09-13 12:59:54 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/manifest.json" for ::1 at 2026-09-13 12:59:55 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for ::1 at 2026-09-13 13:00:39 +0900
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.1ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.2ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 2.8ms | GC: 1.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 28.2ms | GC: 2.3ms)
+Completed 200 OK in 29ms (Views: 28.3ms | ActiveRecord: 0.2ms (2 queries, 0 cached) | GC: 2.3ms)
+
+
+Started GET "/manifest.json" for ::1 at 2026-09-13 13:00:39 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/manifest.json" for ::1 at 2026-09-13 13:00:40 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+  [1m[36mCompany Load (2.7ms)[0m  [1m[34mSELECT "companies".* FROM "companies"[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mPoint Load (0.3ms)[0m  [1m[34mSELECT "points".* FROM "points" WHERE "points"."company_id" = ?[0m  [["company_id", 2]]
+  [1m[36mPoint Destroy (0.0ms)[0m  [1m[31mDELETE FROM "points" WHERE "points"."id" = ?[0m  [["id", 1]]
+  [1m[36mPoint Destroy (0.0ms)[0m  [1m[31mDELETE FROM "points" WHERE "points"."id" = ?[0m  [["id", 2]]
+  [1m[36mPoint Destroy (0.0ms)[0m  [1m[31mDELETE FROM "points" WHERE "points"."id" = ?[0m  [["id", 3]]
+  [1m[36mPoint Destroy (0.0ms)[0m  [1m[31mDELETE FROM "points" WHERE "points"."id" = ?[0m  [["id", 4]]
+  [1m[36mCompany Destroy (0.0ms)[0m  [1m[31mDELETE FROM "companies" WHERE "companies"."id" = ?[0m  [["id", 2]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mPoint Load (0.4ms)[0m  [1m[34mSELECT "points".* FROM "points" WHERE "points"."company_id" = ?[0m  [["company_id", 3]]
+  [1m[36mPoint Destroy (0.0ms)[0m  [1m[31mDELETE FROM "points" WHERE "points"."id" = ?[0m  [["id", 5]]
+  [1m[36mPoint Destroy (0.0ms)[0m  [1m[31mDELETE FROM "points" WHERE "points"."id" = ?[0m  [["id", 6]]
+  [1m[36mPoint Destroy (0.0ms)[0m  [1m[31mDELETE FROM "points" WHERE "points"."id" = ?[0m  [["id", 7]]
+  [1m[36mCompany Destroy (0.0ms)[0m  [1m[31mDELETE FROM "companies" WHERE "companies"."id" = ?[0m  [["id", 3]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mcommit transaction[0m
+Started GET "/" for ::1 at 2026-09-13 13:01:00 +0900
+Processing by MapController#show as */*
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.1ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.0ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 1.3ms | GC: 0.1ms)
+  Rendered layout layouts/application.html.erb (Duration: 11.0ms | GC: 0.9ms)
+Completed 200 OK in 12ms (Views: 11.1ms | ActiveRecord: 0.1ms (2 queries, 0 cached) | GC: 0.9ms)
+
+
+Started GET "/" for 127.0.0.1 at 2026-09-13 13:04:42 +0900
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.2ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.0ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 1.8ms | GC: 0.1ms)
+  Rendered layout layouts/application.html.erb (Duration: 45.9ms | GC: 0.2ms)
+Completed 200 OK in 71ms (Views: 48.1ms | ActiveRecord: 1.5ms (2 queries, 0 cached) | GC: 1.1ms)
+
+
+Started GET "/manifest.json" for 127.0.0.1 at 2026-09-13 13:04:42 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for ::1 at 2026-09-13 13:08:43 +0900
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by MapController#show as */*
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.2ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 1.9ms | GC: 0.1ms)
+  Rendered layout layouts/application.html.erb (Duration: 50.1ms | GC: 0.1ms)
+Completed 200 OK in 76ms (Views: 52.3ms | ActiveRecord: 1.5ms (2 queries, 0 cached) | GC: 1.3ms)
+
+
+Started POST "/companies" for ::1 at 2026-09-13 13:08:43 +0900
+Processing by CompaniesController#create as JSON
+  Parameters: {"company"=>{"name"=>"A社 SmartTech"}}
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/models/company.rb:32:in `assign_color_index'
+  [1m[36mCompany Count (0.5ms)[0m  [1m[34mSELECT COUNT(*) FROM "companies"[0m
+  ↳ app/models/company.rb:32:in `assign_color_index'
+  [1m[36mCompany Create (0.1ms)[0m  [1m[32mINSERT INTO "companies" ("name", "color_index", "created_at", "updated_at") VALUES (?, ?, ?, ?) RETURNING "id"[0m  [["name", "A社 SmartTech"], ["color_index", 0], ["created_at", "2026-09-13 04:08:43.448908"], ["updated_at", "2026-09-13 04:08:43.448908"]]
+  ↳ app/controllers/companies_controller.rb:4:in `create'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/companies_controller.rb:4:in `create'
+Completed 201 Created in 9ms (Views: 0.1ms | ActiveRecord: 1.1ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started POST "/points" for ::1 at 2026-09-13 13:08:43 +0900
+Processing by PointsController#create as JSON
+  Parameters: {"company_id"=>4, "x"=>0.2, "y"=>0.4, "meaning"=>"テスト", "point"=>{"company_id"=>4, "x"=>0.2, "y"=>0.4, "meaning"=>"テスト"}}
+[31mUnpermitted parameter: :point. Context: { controller: PointsController, action: create, request: #<ActionDispatch::Request:0x000000010a5a2660>, params: {"company_id"=>4, "x"=>0.2, "y"=>0.4, "meaning"=>"テスト", "controller"=>"points", "action"=>"create", "point"=>{"company_id"=>4, "x"=>0.2, "y"=>0.4, "meaning"=>"テスト"}} }[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mCompany Load (0.6ms)[0m  [1m[34mSELECT "companies".* FROM "companies" WHERE "companies"."id" = ? LIMIT ?[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mPoint Create (0.2ms)[0m  [1m[32mINSERT INTO "points" ("company_id", "x", "y", "what", "info", "emotion", "meaning", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["company_id", 4], ["x", 0.2], ["y", 0.4], ["what", nil], ["info", nil], ["emotion", nil], ["meaning", "テスト"], ["created_at", "2026-09-13 04:08:43.599637"], ["updated_at", "2026-09-13 04:08:43.599637"]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+Completed 201 Created in 11ms (Views: 0.1ms | ActiveRecord: 1.1ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started POST "/points" for ::1 at 2026-09-13 13:08:43 +0900
+Processing by PointsController#create as JSON
+  Parameters: {"company_id"=>4, "x"=>0.7, "y"=>0.7, "point"=>{"company_id"=>4, "x"=>0.7, "y"=>0.7}}
+[31mUnpermitted parameter: :point. Context: { controller: PointsController, action: create, request: #<ActionDispatch::Request:0x000000010a6ebfa8>, params: {"company_id"=>4, "x"=>0.7, "y"=>0.7, "controller"=>"points", "action"=>"create", "point"=>{"company_id"=>4, "x"=>0.7, "y"=>0.7}} }[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mCompany Load (0.5ms)[0m  [1m[34mSELECT "companies".* FROM "companies" WHERE "companies"."id" = ? LIMIT ?[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mPoint Create (0.1ms)[0m  [1m[32mINSERT INTO "points" ("company_id", "x", "y", "what", "info", "emotion", "meaning", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["company_id", 4], ["x", 0.7], ["y", 0.7], ["what", nil], ["info", nil], ["emotion", nil], ["meaning", nil], ["created_at", "2026-09-13 04:08:43.618688"], ["updated_at", "2026-09-13 04:08:43.618688"]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+Completed 201 Created in 3ms (Views: 0.1ms | ActiveRecord: 0.7ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/" for ::1 at 2026-09-13 13:08:44 +0900
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.4ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.5ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 2.6ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 4.0ms | GC: 0.0ms)
+Completed 200 OK in 5ms (Views: 3.4ms | ActiveRecord: 0.9ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/manifest.json" for ::1 at 2026-09-13 13:08:44 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/manifest.json" for ::1 at 2026-09-13 13:08:45 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+  [1m[36mCompany Load (2.0ms)[0m  [1m[34mSELECT "companies".* FROM "companies"[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mPoint Load (0.2ms)[0m  [1m[34mSELECT "points".* FROM "points" WHERE "points"."company_id" = ?[0m  [["company_id", 4]]
+  [1m[36mPoint Destroy (0.1ms)[0m  [1m[31mDELETE FROM "points" WHERE "points"."id" = ?[0m  [["id", 8]]
+  [1m[36mPoint Destroy (0.1ms)[0m  [1m[31mDELETE FROM "points" WHERE "points"."id" = ?[0m  [["id", 9]]
+  [1m[36mCompany Destroy (0.0ms)[0m  [1m[31mDELETE FROM "companies" WHERE "companies"."id" = ?[0m  [["id", 4]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mcommit transaction[0m
+Started GET "/" for 127.0.0.1 at 2026-09-13 13:11:27 +0900
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.3ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 2.3ms | GC: 0.1ms)
+  Rendered layout layouts/application.html.erb (Duration: 37.8ms | GC: 0.2ms)
+Completed 200 OK in 65ms (Views: 39.9ms | ActiveRecord: 1.7ms (2 queries, 0 cached) | GC: 1.3ms)
+
+
+Started GET "/manifest.json" for 127.0.0.1 at 2026-09-13 13:11:27 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started POST "/companies" for 127.0.0.1 at 2026-09-13 13:13:48 +0900
+Processing by CompaniesController#create as JSON
+  Parameters: {"company"=>{"name"=>"ああ"}}
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/models/company.rb:32:in `assign_color_index'
+  [1m[36mCompany Count (0.9ms)[0m  [1m[34mSELECT COUNT(*) FROM "companies"[0m
+  ↳ app/models/company.rb:32:in `assign_color_index'
+  [1m[36mCompany Create (0.9ms)[0m  [1m[32mINSERT INTO "companies" ("name", "color_index", "created_at", "updated_at") VALUES (?, ?, ?, ?) RETURNING "id"[0m  [["name", "ああ"], ["color_index", 0], ["created_at", "2026-09-13 04:13:48.266124"], ["updated_at", "2026-09-13 04:13:48.266124"]]
+  ↳ app/controllers/companies_controller.rb:4:in `create'
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/companies_controller.rb:4:in `create'
+Completed 201 Created in 18ms (Views: 0.3ms | ActiveRecord: 2.8ms (2 queries, 0 cached) | GC: 0.8ms)
+
+
+Started POST "/points" for 127.0.0.1 at 2026-09-13 13:13:52 +0900
+Processing by PointsController#create as JSON
+  Parameters: {"company_id"=>5, "x"=>0.06221211099876419, "y"=>0.4564009685279068, "point"=>{"company_id"=>5, "x"=>0.06221211099876419, "y"=>0.4564009685279068}}
+[31mUnpermitted parameter: :point. Context: { controller: PointsController, action: create, request: #<ActionDispatch::Request:0x000000010e6fe820>, params: {"company_id"=>5, "x"=>0.06221211099876419, "y"=>0.4564009685279068, "controller"=>"points", "action"=>"create", "point"=>{"company_id"=>5, "x"=>0.06221211099876419, "y"=>0.4564009685279068}} }[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mCompany Load (1.0ms)[0m  [1m[34mSELECT "companies".* FROM "companies" WHERE "companies"."id" = ? LIMIT ?[0m  [["id", 5], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mPoint Create (0.4ms)[0m  [1m[32mINSERT INTO "points" ("company_id", "x", "y", "what", "info", "emotion", "meaning", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["company_id", 5], ["x", 0.06221211099876419], ["y", 0.4564009685279068], ["what", nil], ["info", nil], ["emotion", nil], ["meaning", nil], ["created_at", "2026-09-13 04:13:52.256878"], ["updated_at", "2026-09-13 04:13:52.256878"]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+Completed 201 Created in 21ms (Views: 0.2ms | ActiveRecord: 1.7ms (2 queries, 0 cached) | GC: 1.3ms)
+
+
+Started POST "/points" for 127.0.0.1 at 2026-09-13 13:13:53 +0900
+Processing by PointsController#create as JSON
+  Parameters: {"company_id"=>5, "x"=>0.17736771149309066, "y"=>0.7260358969728017, "point"=>{"company_id"=>5, "x"=>0.17736771149309066, "y"=>0.7260358969728017}}
+[31mUnpermitted parameter: :point. Context: { controller: PointsController, action: create, request: #<ActionDispatch::Request:0x000000010e87d6b0>, params: {"company_id"=>5, "x"=>0.17736771149309066, "y"=>0.7260358969728017, "controller"=>"points", "action"=>"create", "point"=>{"company_id"=>5, "x"=>0.17736771149309066, "y"=>0.7260358969728017}} }[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mCompany Load (0.9ms)[0m  [1m[34mSELECT "companies".* FROM "companies" WHERE "companies"."id" = ? LIMIT ?[0m  [["id", 5], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mPoint Create (0.2ms)[0m  [1m[32mINSERT INTO "points" ("company_id", "x", "y", "what", "info", "emotion", "meaning", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["company_id", 5], ["x", 0.17736771149309066], ["y", 0.7260358969728017], ["what", nil], ["info", nil], ["emotion", nil], ["meaning", nil], ["created_at", "2026-09-13 04:13:53.092007"], ["updated_at", "2026-09-13 04:13:53.092007"]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+Completed 201 Created in 6ms (Views: 0.1ms | ActiveRecord: 1.3ms (2 queries, 0 cached) | GC: 0.2ms)
+
+
+Started POST "/points" for 127.0.0.1 at 2026-09-13 13:13:54 +0900
+Processing by PointsController#create as JSON
+  Parameters: {"company_id"=>5, "x"=>0.4273396247612628, "y"=>0.4507835741853047, "point"=>{"company_id"=>5, "x"=>0.4273396247612628, "y"=>0.4507835741853047}}
+[31mUnpermitted parameter: :point. Context: { controller: PointsController, action: create, request: #<ActionDispatch::Request:0x000000010e946380>, params: {"company_id"=>5, "x"=>0.4273396247612628, "y"=>0.4507835741853047, "controller"=>"points", "action"=>"create", "point"=>{"company_id"=>5, "x"=>0.4273396247612628, "y"=>0.4507835741853047}} }[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mCompany Load (1.5ms)[0m  [1m[34mSELECT "companies".* FROM "companies" WHERE "companies"."id" = ? LIMIT ?[0m  [["id", 5], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mPoint Create (0.1ms)[0m  [1m[32mINSERT INTO "points" ("company_id", "x", "y", "what", "info", "emotion", "meaning", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["company_id", 5], ["x", 0.4273396247612628], ["y", 0.4507835741853047], ["what", nil], ["info", nil], ["emotion", nil], ["meaning", nil], ["created_at", "2026-09-13 04:13:54.036268"], ["updated_at", "2026-09-13 04:13:54.036268"]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+Completed 201 Created in 7ms (Views: 0.1ms | ActiveRecord: 1.9ms (2 queries, 0 cached) | GC: 0.5ms)
+
+
+Started POST "/points" for 127.0.0.1 at 2026-09-13 13:13:55 +0900
+Processing by PointsController#create as JSON
+  Parameters: {"company_id"=>5, "x"=>0.5130041568363105, "y"=>0.5322357921530334, "point"=>{"company_id"=>5, "x"=>0.5130041568363105, "y"=>0.5322357921530334}}
+[31mUnpermitted parameter: :point. Context: { controller: PointsController, action: create, request: #<ActionDispatch::Request:0x000000010e9adbe8>, params: {"company_id"=>5, "x"=>0.5130041568363105, "y"=>0.5322357921530334, "controller"=>"points", "action"=>"create", "point"=>{"company_id"=>5, "x"=>0.5130041568363105, "y"=>0.5322357921530334}} }[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mCompany Load (1.3ms)[0m  [1m[34mSELECT "companies".* FROM "companies" WHERE "companies"."id" = ? LIMIT ?[0m  [["id", 5], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mPoint Create (0.2ms)[0m  [1m[32mINSERT INTO "points" ("company_id", "x", "y", "what", "info", "emotion", "meaning", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["company_id", 5], ["x", 0.5130041568363105], ["y", 0.5322357921530334], ["what", nil], ["info", nil], ["emotion", nil], ["meaning", nil], ["created_at", "2026-09-13 04:13:55.278247"], ["updated_at", "2026-09-13 04:13:55.278247"]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+Completed 201 Created in 8ms (Views: 0.2ms | ActiveRecord: 1.7ms (2 queries, 0 cached) | GC: 1.0ms)
+
+
+Started DELETE "/points/13" for 127.0.0.1 at 2026-09-13 13:14:15 +0900
+Processing by PointsController#destroy as JSON
+  Parameters: {"id"=>"13", "point"=>{}}
+  [1m[36mPoint Load (0.2ms)[0m  [1m[34mSELECT "points".* FROM "points" WHERE "points"."id" = ? LIMIT ?[0m  [["id", 13], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:21:in `destroy'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/points_controller.rb:22:in `destroy'
+  [1m[36mPoint Destroy (1.2ms)[0m  [1m[31mDELETE FROM "points" WHERE "points"."id" = ?[0m  [["id", 13]]
+  ↳ app/controllers/points_controller.rb:22:in `destroy'
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/points_controller.rb:22:in `destroy'
+Completed 204 No Content in 6ms (ActiveRecord: 2.0ms (2 queries, 0 cached) | GC: 0.3ms)
+
+
+Started PATCH "/points/12" for 127.0.0.1 at 2026-09-13 13:14:18 +0900
+Processing by PointsController#update as JSON
+  Parameters: {"x"=>0.4273396247612628, "y"=>0.4507835741853047, "id"=>"12", "point"=>{"x"=>0.4273396247612628, "y"=>0.4507835741853047}}
+  [1m[36mPoint Load (0.2ms)[0m  [1m[34mSELECT "points".* FROM "points" WHERE "points"."id" = ? LIMIT ?[0m  [["id", 12], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:12:in `update'
+[31mUnpermitted parameters: :id, :point. Context: { controller: PointsController, action: update, request: #<ActionDispatch::Request:0x000000010eae4e80>, params: {"x"=>0.4273396247612628, "y"=>0.4507835741853047, "controller"=>"points", "action"=>"update", "id"=>"12", "point"=>{"x"=>0.4273396247612628, "y"=>0.4507835741853047}} }[0m
+Completed 200 OK in 3ms (Views: 0.3ms | ActiveRecord: 0.2ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started PATCH "/points/12" for 127.0.0.1 at 2026-09-13 13:14:27 +0900
+Processing by PointsController#update as JSON
+  Parameters: {"what"=>"ああ", "id"=>"12", "point"=>{"what"=>"ああ"}}
+  [1m[36mPoint Load (0.2ms)[0m  [1m[34mSELECT "points".* FROM "points" WHERE "points"."id" = ? LIMIT ?[0m  [["id", 12], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:12:in `update'
+[31mUnpermitted parameters: :id, :point. Context: { controller: PointsController, action: update, request: #<ActionDispatch::Request:0x000000010eb0f8d8>, params: {"what"=>"ああ", "controller"=>"points", "action"=>"update", "id"=>"12", "point"=>{"what"=>"ああ"}} }[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/points_controller.rb:13:in `update'
+  [1m[36mPoint Update (0.8ms)[0m  [1m[33mUPDATE "points" SET "what" = ?, "updated_at" = ? WHERE "points"."id" = ?[0m  [["what", "ああ"], ["updated_at", "2026-09-13 04:14:27.282003"], ["id", 12]]
+  ↳ app/controllers/points_controller.rb:13:in `update'
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/points_controller.rb:13:in `update'
+Completed 200 OK in 8ms (Views: 0.2ms | ActiveRecord: 1.3ms (2 queries, 0 cached) | GC: 0.9ms)
+
+
+Started PATCH "/points/12" for 127.0.0.1 at 2026-09-13 13:14:29 +0900
+Processing by PointsController#update as JSON
+  Parameters: {"info"=>"あああ", "id"=>"12", "point"=>{"info"=>"あああ"}}
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" WHERE "points"."id" = ? LIMIT ?[0m  [["id", 12], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:12:in `update'
+[31mUnpermitted parameters: :id, :point. Context: { controller: PointsController, action: update, request: #<ActionDispatch::Request:0x000000010eb7c3e8>, params: {"info"=>"あああ", "controller"=>"points", "action"=>"update", "id"=>"12", "point"=>{"info"=>"あああ"}} }[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/points_controller.rb:13:in `update'
+  [1m[36mPoint Update (0.6ms)[0m  [1m[33mUPDATE "points" SET "info" = ?, "updated_at" = ? WHERE "points"."id" = ?[0m  [["info", "あああ"], ["updated_at", "2026-09-13 04:14:29.784411"], ["id", 12]]
+  ↳ app/controllers/points_controller.rb:13:in `update'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/points_controller.rb:13:in `update'
+Completed 200 OK in 5ms (Views: 0.3ms | ActiveRecord: 0.8ms (2 queries, 0 cached) | GC: 0.6ms)
+
+
+Started PATCH "/points/12" for 127.0.0.1 at 2026-09-13 13:14:32 +0900
+Processing by PointsController#update as JSON
+  Parameters: {"emotion"=>"aaaaaaw", "id"=>"12", "point"=>{"emotion"=>"aaaaaaw"}}
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" WHERE "points"."id" = ? LIMIT ?[0m  [["id", 12], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:12:in `update'
+[31mUnpermitted parameters: :id, :point. Context: { controller: PointsController, action: update, request: #<ActionDispatch::Request:0x000000010ebe5938>, params: {"emotion"=>"aaaaaaw", "controller"=>"points", "action"=>"update", "id"=>"12", "point"=>{"emotion"=>"aaaaaaw"}} }[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/points_controller.rb:13:in `update'
+  [1m[36mPoint Update (0.8ms)[0m  [1m[33mUPDATE "points" SET "emotion" = ?, "updated_at" = ? WHERE "points"."id" = ?[0m  [["emotion", "aaaaaaw"], ["updated_at", "2026-09-13 04:14:32.296707"], ["id", 12]]
+  ↳ app/controllers/points_controller.rb:13:in `update'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/points_controller.rb:13:in `update'
+Completed 200 OK in 6ms (Views: 0.2ms | ActiveRecord: 1.0ms (2 queries, 0 cached) | GC: 0.5ms)
+
+
+Started PATCH "/points/12" for 127.0.0.1 at 2026-09-13 13:14:33 +0900
+Processing by PointsController#update as JSON
+  Parameters: {"emotion"=>"ああああ", "id"=>"12", "point"=>{"emotion"=>"ああああ"}}
+  [1m[36mPoint Load (0.2ms)[0m  [1m[34mSELECT "points".* FROM "points" WHERE "points"."id" = ? LIMIT ?[0m  [["id", 12], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:12:in `update'
+[31mUnpermitted parameters: :id, :point. Context: { controller: PointsController, action: update, request: #<ActionDispatch::Request:0x000000010ec54900>, params: {"emotion"=>"ああああ", "controller"=>"points", "action"=>"update", "id"=>"12", "point"=>{"emotion"=>"ああああ"}} }[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/points_controller.rb:13:in `update'
+  [1m[36mPoint Update (1.6ms)[0m  [1m[33mUPDATE "points" SET "emotion" = ?, "updated_at" = ? WHERE "points"."id" = ?[0m  [["emotion", "ああああ"], ["updated_at", "2026-09-13 04:14:33.834479"], ["id", 12]]
+  ↳ app/controllers/points_controller.rb:13:in `update'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/points_controller.rb:13:in `update'
+Completed 200 OK in 8ms (Views: 0.2ms | ActiveRecord: 1.9ms (2 queries, 0 cached) | GC: 0.7ms)
+
+
+Started PATCH "/points/12" for 127.0.0.1 at 2026-09-13 13:14:36 +0900
+Processing by PointsController#update as JSON
+  Parameters: {"meaning"=>"あああ", "id"=>"12", "point"=>{"meaning"=>"あああ"}}
+  [1m[36mPoint Load (0.2ms)[0m  [1m[34mSELECT "points".* FROM "points" WHERE "points"."id" = ? LIMIT ?[0m  [["id", 12], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:12:in `update'
+[31mUnpermitted parameters: :id, :point. Context: { controller: PointsController, action: update, request: #<ActionDispatch::Request:0x000000010ecbfc78>, params: {"meaning"=>"あああ", "controller"=>"points", "action"=>"update", "id"=>"12", "point"=>{"meaning"=>"あああ"}} }[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/points_controller.rb:13:in `update'
+  [1m[36mPoint Update (0.8ms)[0m  [1m[33mUPDATE "points" SET "meaning" = ?, "updated_at" = ? WHERE "points"."id" = ?[0m  [["meaning", "あああ"], ["updated_at", "2026-09-13 04:14:36.788120"], ["id", 12]]
+  ↳ app/controllers/points_controller.rb:13:in `update'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/points_controller.rb:13:in `update'
+Completed 200 OK in 7ms (Views: 0.1ms | ActiveRecord: 1.0ms (2 queries, 0 cached) | GC: 0.7ms)
+
+
+Started PATCH "/points/12" for 127.0.0.1 at 2026-09-13 13:14:39 +0900
+Processing by PointsController#update as JSON
+  Parameters: {"meaning"=>"aaaaaaw", "id"=>"12", "point"=>{"meaning"=>"aaaaaaw"}}
+  [1m[36mPoint Load (0.2ms)[0m  [1m[34mSELECT "points".* FROM "points" WHERE "points"."id" = ? LIMIT ?[0m  [["id", 12], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:12:in `update'
+[31mUnpermitted parameters: :id, :point. Context: { controller: PointsController, action: update, request: #<ActionDispatch::Request:0x000000010ed2efd8>, params: {"meaning"=>"aaaaaaw", "controller"=>"points", "action"=>"update", "id"=>"12", "point"=>{"meaning"=>"aaaaaaw"}} }[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/points_controller.rb:13:in `update'
+  [1m[36mPoint Update (0.7ms)[0m  [1m[33mUPDATE "points" SET "meaning" = ?, "updated_at" = ? WHERE "points"."id" = ?[0m  [["meaning", "aaaaaaw"], ["updated_at", "2026-09-13 04:14:39.624423"], ["id", 12]]
+  ↳ app/controllers/points_controller.rb:13:in `update'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/points_controller.rb:13:in `update'
+Completed 200 OK in 6ms (Views: 0.1ms | ActiveRecord: 1.0ms (2 queries, 0 cached) | GC: 0.4ms)
+
+
+Started PATCH "/points/12" for 127.0.0.1 at 2026-09-13 13:14:40 +0900
+Processing by PointsController#update as JSON
+  Parameters: {"meaning"=>"aaaaaawああ", "id"=>"12", "point"=>{"meaning"=>"aaaaaawああ"}}
+  [1m[36mPoint Load (0.2ms)[0m  [1m[34mSELECT "points".* FROM "points" WHERE "points"."id" = ? LIMIT ?[0m  [["id", 12], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:12:in `update'
+[31mUnpermitted parameters: :id, :point. Context: { controller: PointsController, action: update, request: #<ActionDispatch::Request:0x000000010eda4800>, params: {"meaning"=>"aaaaaawああ", "controller"=>"points", "action"=>"update", "id"=>"12", "point"=>{"meaning"=>"aaaaaawああ"}} }[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/points_controller.rb:13:in `update'
+  [1m[36mPoint Update (4.5ms)[0m  [1m[33mUPDATE "points" SET "meaning" = ?, "updated_at" = ? WHERE "points"."id" = ?[0m  [["meaning", "aaaaaawああ"], ["updated_at", "2026-09-13 04:14:40.586649"], ["id", 12]]
+  ↳ app/controllers/points_controller.rb:13:in `update'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/points_controller.rb:13:in `update'
+Completed 200 OK in 15ms (Views: 0.1ms | ActiveRecord: 4.8ms (2 queries, 0 cached) | GC: 8.3ms)
+
+
+Started PATCH "/points/12" for 127.0.0.1 at 2026-09-13 13:14:41 +0900
+Processing by PointsController#update as JSON
+  Parameters: {"meaning"=>"aaaaaawああ", "id"=>"12", "point"=>{"meaning"=>"aaaaaawああ"}}
+  [1m[36mPoint Load (0.2ms)[0m  [1m[34mSELECT "points".* FROM "points" WHERE "points"."id" = ? LIMIT ?[0m  [["id", 12], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:12:in `update'
+[31mUnpermitted parameters: :id, :point. Context: { controller: PointsController, action: update, request: #<ActionDispatch::Request:0x000000010ecaf738>, params: {"meaning"=>"aaaaaawああ", "controller"=>"points", "action"=>"update", "id"=>"12", "point"=>{"meaning"=>"aaaaaawああ"}} }[0m
+Completed 200 OK in 8ms (Views: 0.2ms | ActiveRecord: 0.2ms (1 query, 0 cached) | GC: 4.7ms)
+
+
+Started GET "/" for ::1 at 2026-09-13 13:16:03 +0900
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by MapController#show as */*
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.1ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.2ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 6.4ms | GC: 0.1ms)
+  Rendered layout layouts/application.html.erb (Duration: 56.1ms | GC: 0.1ms)
+Completed 200 OK in 79ms (Views: 57.9ms | ActiveRecord: 1.6ms (2 queries, 0 cached) | GC: 1.1ms)
+
+
+Started GET "/" for ::1 at 2026-09-13 13:16:04 +0900
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.1ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 4.5ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 13.9ms | GC: 0.0ms)
+Completed 200 OK in 16ms (Views: 14.2ms | ActiveRecord: 0.2ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/manifest.json" for ::1 at 2026-09-13 13:16:04 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/manifest.json" for ::1 at 2026-09-13 13:16:05 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for ::1 at 2026-09-13 13:24:28 +0900
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by MapController#show as */*
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.3ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 6.6ms | GC: 0.1ms)
+  Rendered layout layouts/application.html.erb (Duration: 58.1ms | GC: 0.1ms)
+Completed 200 OK in 84ms (Views: 59.6ms | ActiveRecord: 1.7ms (2 queries, 0 cached) | GC: 1.1ms)
+
+
+Started GET "/companies" for ::1 at 2026-09-13 13:24:28 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/companies"):
+  
+Started GET "/" for ::1 at 2026-09-13 13:24:29 +0900
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.1ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 2.3ms | GC: 0.1ms)
+  Rendered layout layouts/application.html.erb (Duration: 4.7ms | GC: 0.1ms)
+Completed 200 OK in 6ms (Views: 5.4ms | ActiveRecord: 0.2ms (2 queries, 0 cached) | GC: 0.1ms)
+
+
+Started GET "/manifest.json" for ::1 at 2026-09-13 13:24:29 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/manifest.json" for ::1 at 2026-09-13 13:24:30 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for ::1 at 2026-09-13 13:25:07 +0900
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (2.9ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.3ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 11.3ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 44.7ms | GC: 2.6ms)
+Completed 200 OK in 50ms (Views: 42.6ms | ActiveRecord: 3.2ms (2 queries, 0 cached) | GC: 2.6ms)
+
+
+Started GET "/manifest.json" for ::1 at 2026-09-13 13:25:07 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/manifest.json" for ::1 at 2026-09-13 13:25:08 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for ::1 at 2026-09-13 13:28:37 +0900
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by MapController#show as */*
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.4ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 6.5ms | GC: 0.1ms)
+  Rendered layout layouts/application.html.erb (Duration: 63.7ms | GC: 0.1ms)
+Completed 200 OK in 88ms (Views: 65.3ms | ActiveRecord: 2.0ms (2 queries, 0 cached) | GC: 1.2ms)
+
+
+Started GET "/" for ::1 at 2026-09-13 13:30:10 +0900
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.1ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.0ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 4.8ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 36.3ms | GC: 11.9ms)
+Completed 200 OK in 45ms (Views: 37.5ms | ActiveRecord: 1.4ms (2 queries, 0 cached) | GC: 11.9ms)
+
+
+Started GET "/manifest.json" for ::1 at 2026-09-13 13:30:10 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/manifest.json" for ::1 at 2026-09-13 13:30:11 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for ::1 at 2026-09-13 13:34:20 +0900
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by MapController#show as */*
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.4ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 6.7ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 60.0ms | GC: 0.0ms)
+Completed 200 OK in 84ms (Views: 61.6ms | ActiveRecord: 1.7ms (2 queries, 0 cached) | GC: 1.1ms)
+
+
+Started GET "/" for ::1 at 2026-09-13 13:34:21 +0900
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.1ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 3.7ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 5.2ms | GC: 0.0ms)
+Completed 200 OK in 6ms (Views: 5.3ms | ActiveRecord: 0.2ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/manifest.json" for ::1 at 2026-09-13 13:34:21 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/manifest.json" for ::1 at 2026-09-13 13:34:21 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for ::1 at 2026-09-13 13:37:08 +0900
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by MapController#show as */*
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.4ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 6.9ms | GC: 0.1ms)
+  Rendered layout layouts/application.html.erb (Duration: 64.7ms | GC: 0.1ms)
+Completed 200 OK in 91ms (Views: 66.7ms | ActiveRecord: 1.9ms (2 queries, 0 cached) | GC: 1.3ms)
+
+
+Started GET "/" for ::1 at 2026-09-13 13:37:56 +0900
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.2ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.3ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 3.6ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 6.1ms | GC: 0.0ms)
+Completed 200 OK in 8ms (Views: 6.6ms | ActiveRecord: 0.3ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/manifest.json" for ::1 at 2026-09-13 13:37:56 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/manifest.json" for ::1 at 2026-09-13 13:37:57 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for ::1 at 2026-09-13 13:38:46 +0900
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.3ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.2ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 10.7ms | GC: 0.3ms)
+  Rendered layout layouts/application.html.erb (Duration: 38.1ms | GC: 3.2ms)
+Completed 200 OK in 42ms (Views: 39.8ms | ActiveRecord: 0.4ms (2 queries, 0 cached) | GC: 3.2ms)
+
+
+Started GET "/manifest.json" for ::1 at 2026-09-13 13:38:46 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/manifest.json" for ::1 at 2026-09-13 13:38:46 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for ::1 at 2026-09-13 13:42:19 +0900
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.4ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 6.5ms | GC: 0.1ms)
+  Rendered layout layouts/application.html.erb (Duration: 65.7ms | GC: 0.1ms)
+Completed 200 OK in 91ms (Views: 67.3ms | ActiveRecord: 1.9ms (2 queries, 0 cached) | GC: 1.0ms)
+
+
+Started GET "/manifest.json" for ::1 at 2026-09-13 13:42:19 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/manifest.json" for ::1 at 2026-09-13 13:42:21 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for ::1 at 2026-09-13 13:46:58 +0900
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (1.0ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 6.3ms | GC: 0.7ms)
+  Rendered layout layouts/application.html.erb (Duration: 10.1ms | GC: 0.9ms)
+Completed 200 OK in 15ms (Views: 10.4ms | ActiveRecord: 1.0ms (2 queries, 0 cached) | GC: 0.9ms)
+
+
+Started GET "/manifest.json" for ::1 at 2026-09-13 13:46:58 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/manifest.json" for ::1 at 2026-09-13 13:46:59 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for ::1 at 2026-09-13 13:47:57 +0900
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.3ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.0ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 3.4ms | GC: 0.6ms)
+  Rendered layout layouts/application.html.erb (Duration: 18.5ms | GC: 1.1ms)
+Completed 200 OK in 21ms (Views: 18.8ms | ActiveRecord: 0.3ms (2 queries, 0 cached) | GC: 1.1ms)
+
+
+Started GET "/manifest.json" for ::1 at 2026-09-13 13:47:57 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for 127.0.0.1 at 2026-09-13 13:49:15 +0900
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.3ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 7.2ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 45.2ms | GC: 0.0ms)
+Completed 200 OK in 72ms (Views: 47.0ms | ActiveRecord: 1.9ms (2 queries, 0 cached) | GC: 0.5ms)
+
+
+Started GET "/manifest.json" for 127.0.0.1 at 2026-09-13 13:49:15 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for ::1 at 2026-09-13 13:52:41 +0900
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by MapController#show as */*
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.3ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 6.7ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 65.1ms | GC: 0.0ms)
+Completed 200 OK in 89ms (Views: 66.7ms | ActiveRecord: 1.7ms (2 queries, 0 cached) | GC: 0.5ms)
+
+
+Started GET "/" for ::1 at 2026-09-13 13:52:42 +0900
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.1ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 2.2ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 4.0ms | GC: 0.0ms)
+Completed 200 OK in 6ms (Views: 4.2ms | ActiveRecord: 0.1ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/manifest.json" for ::1 at 2026-09-13 13:52:42 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/manifest.json" for ::1 at 2026-09-13 13:52:43 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for 127.0.0.1 at 2026-09-13 13:54:12 +0900
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.3ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 7.2ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 102.0ms | GC: 0.0ms)
+Completed 200 OK in 130ms (Views: 103.9ms | ActiveRecord: 2.0ms (2 queries, 0 cached) | GC: 0.6ms)
+
+
+Started GET "/manifest.json" for 127.0.0.1 at 2026-09-13 13:54:12 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started PATCH "/points/12" for 127.0.0.1 at 2026-09-13 13:54:40 +0900
+Processing by PointsController#update as JSON
+  Parameters: {"x"=>0.4273396247612628, "y"=>0.4507835741853047, "id"=>"12", "point"=>{"x"=>0.4273396247612628, "y"=>0.4507835741853047}}
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" WHERE "points"."id" = ? LIMIT ?[0m  [["id", 12], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:12:in `update'
+[31mUnpermitted parameters: :id, :point. Context: { controller: PointsController, action: update, request: #<ActionDispatch::Request:0x000000010e6c8090>, params: {"x"=>0.4273396247612628, "y"=>0.4507835741853047, "controller"=>"points", "action"=>"update", "id"=>"12", "point"=>{"x"=>0.4273396247612628, "y"=>0.4507835741853047}} }[0m
+Completed 200 OK in 4ms (Views: 0.1ms | ActiveRecord: 0.1ms (1 query, 0 cached) | GC: 0.2ms)
+
+
+Started PATCH "/points/12" for 127.0.0.1 at 2026-09-13 13:54:46 +0900
+Processing by PointsController#update as JSON
+  Parameters: {"what"=>"ああ", "info"=>"あああ", "emotion"=>"ああああ", "meaning"=>"aaaaaawああ", "id"=>"12", "point"=>{"what"=>"ああ", "info"=>"あああ", "emotion"=>"ああああ", "meaning"=>"aaaaaawああ"}}
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" WHERE "points"."id" = ? LIMIT ?[0m  [["id", 12], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:12:in `update'
+[31mUnpermitted parameters: :id, :point. Context: { controller: PointsController, action: update, request: #<ActionDispatch::Request:0x000000010e7aad28>, params: {"what"=>"ああ", "info"=>"あああ", "emotion"=>"ああああ", "meaning"=>"aaaaaawああ", "controller"=>"points", "action"=>"update", "id"=>"12", "point"=>{"what"=>"ああ", "info"=>"あああ", "emotion"=>"ああああ", "meaning"=>"aaaaaawああ"}} }[0m
+Completed 200 OK in 4ms (Views: 0.1ms | ActiveRecord: 0.1ms (1 query, 0 cached) | GC: 0.1ms)
+
+
+Started PATCH "/points/11" for 127.0.0.1 at 2026-09-13 13:55:09 +0900
+Processing by PointsController#update as JSON
+  Parameters: {"x"=>0.17736771149309066, "y"=>0.7260358969728017, "id"=>"11", "point"=>{"x"=>0.17736771149309066, "y"=>0.7260358969728017}}
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" WHERE "points"."id" = ? LIMIT ?[0m  [["id", 11], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:12:in `update'
+[31mUnpermitted parameters: :id, :point. Context: { controller: PointsController, action: update, request: #<ActionDispatch::Request:0x000000010f0427b0>, params: {"x"=>0.17736771149309066, "y"=>0.7260358969728017, "controller"=>"points", "action"=>"update", "id"=>"11", "point"=>{"x"=>0.17736771149309066, "y"=>0.7260358969728017}} }[0m
+Completed 200 OK in 3ms (Views: 0.1ms | ActiveRecord: 0.1ms (1 query, 0 cached) | GC: 0.1ms)
+
+
+Started PATCH "/points/12" for 127.0.0.1 at 2026-09-13 13:55:10 +0900
+Processing by PointsController#update as JSON
+  Parameters: {"x"=>0.43183240471576223, "y"=>0.45368453250054064, "id"=>"12", "point"=>{"x"=>0.43183240471576223, "y"=>0.45368453250054064}}
+  [1m[36mPoint Load (0.2ms)[0m  [1m[34mSELECT "points".* FROM "points" WHERE "points"."id" = ? LIMIT ?[0m  [["id", 12], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:12:in `update'
+[31mUnpermitted parameters: :id, :point. Context: { controller: PointsController, action: update, request: #<ActionDispatch::Request:0x000000010f071d30>, params: {"x"=>0.43183240471576223, "y"=>0.45368453250054064, "controller"=>"points", "action"=>"update", "id"=>"12", "point"=>{"x"=>0.43183240471576223, "y"=>0.45368453250054064}} }[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/points_controller.rb:13:in `update'
+  [1m[36mPoint Update (2.6ms)[0m  [1m[33mUPDATE "points" SET "x" = ?, "y" = ?, "updated_at" = ? WHERE "points"."id" = ?[0m  [["x", 0.43183240471576223], ["y", 0.45368453250054064], ["updated_at", "2026-09-13 04:55:10.630649"], ["id", 12]]
+  ↳ app/controllers/points_controller.rb:13:in `update'
+  [1m[36mTRANSACTION (0.6ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/points_controller.rb:13:in `update'
+Completed 200 OK in 9ms (Views: 0.2ms | ActiveRecord: 3.4ms (2 queries, 0 cached) | GC: 0.1ms)
+
+
+Started PATCH "/points/11" for 127.0.0.1 at 2026-09-13 13:55:11 +0900
+Processing by PointsController#update as JSON
+  Parameters: {"x"=>0.17736771149309066, "y"=>0.7260358969728017, "id"=>"11", "point"=>{"x"=>0.17736771149309066, "y"=>0.7260358969728017}}
+  [1m[36mPoint Load (0.2ms)[0m  [1m[34mSELECT "points".* FROM "points" WHERE "points"."id" = ? LIMIT ?[0m  [["id", 11], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:12:in `update'
+[31mUnpermitted parameters: :id, :point. Context: { controller: PointsController, action: update, request: #<ActionDispatch::Request:0x000000010f133d18>, params: {"x"=>0.17736771149309066, "y"=>0.7260358969728017, "controller"=>"points", "action"=>"update", "id"=>"11", "point"=>{"x"=>0.17736771149309066, "y"=>0.7260358969728017}} }[0m
+Completed 200 OK in 3ms (Views: 0.1ms | ActiveRecord: 0.2ms (1 query, 0 cached) | GC: 0.1ms)
+
+
+Started PATCH "/points/10" for 127.0.0.1 at 2026-09-13 13:55:14 +0900
+Processing by PointsController#update as JSON
+  Parameters: {"x"=>0.06221211099876419, "y"=>0.4564009685279068, "id"=>"10", "point"=>{"x"=>0.06221211099876419, "y"=>0.4564009685279068}}
+  [1m[36mPoint Load (0.2ms)[0m  [1m[34mSELECT "points".* FROM "points" WHERE "points"."id" = ? LIMIT ?[0m  [["id", 10], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:12:in `update'
+[31mUnpermitted parameters: :id, :point. Context: { controller: PointsController, action: update, request: #<ActionDispatch::Request:0x000000010f15ba98>, params: {"x"=>0.06221211099876419, "y"=>0.4564009685279068, "controller"=>"points", "action"=>"update", "id"=>"10", "point"=>{"x"=>0.06221211099876419, "y"=>0.4564009685279068}} }[0m
+Completed 200 OK in 3ms (Views: 0.1ms | ActiveRecord: 0.2ms (1 query, 0 cached) | GC: 0.2ms)
+
+
+Started GET "/" for 127.0.0.1 at 2026-09-13 13:57:00 +0900
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.1ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 6.7ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 39.9ms | GC: 0.0ms)
+Completed 200 OK in 68ms (Views: 42.0ms | ActiveRecord: 1.8ms (2 queries, 0 cached) | GC: 0.6ms)
+
+
+Started GET "/manifest.json" for 127.0.0.1 at 2026-09-13 13:57:00 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started POST "/points" for 127.0.0.1 at 2026-09-13 13:58:39 +0900
+Processing by PointsController#create as JSON
+  Parameters: {"company_id"=>5, "x"=>0.26022357038535, "y"=>0.7354913611291369, "point"=>{"company_id"=>5, "x"=>0.26022357038535, "y"=>0.7354913611291369}}
+[31mUnpermitted parameter: :point. Context: { controller: PointsController, action: create, request: #<ActionDispatch::Request:0x000000010b127508>, params: {"company_id"=>5, "x"=>0.26022357038535, "y"=>0.7354913611291369, "controller"=>"points", "action"=>"create", "point"=>{"company_id"=>5, "x"=>0.26022357038535, "y"=>0.7354913611291369}} }[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mCompany Load (0.1ms)[0m  [1m[34mSELECT "companies".* FROM "companies" WHERE "companies"."id" = ? LIMIT ?[0m  [["id", 5], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mPoint Create (0.3ms)[0m  [1m[32mINSERT INTO "points" ("company_id", "x", "y", "what", "info", "emotion", "meaning", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["company_id", 5], ["x", 0.26022357038535], ["y", 0.7354913611291369], ["what", nil], ["info", nil], ["emotion", nil], ["meaning", nil], ["created_at", "2026-09-13 04:58:39.496184"], ["updated_at", "2026-09-13 04:58:39.496184"]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+Completed 201 Created in 17ms (Views: 0.2ms | ActiveRecord: 2.8ms (2 queries, 0 cached) | GC: 1.5ms)
+
+
+Started POST "/points" for 127.0.0.1 at 2026-09-13 13:58:40 +0900
+Processing by PointsController#create as JSON
+  Parameters: {"company_id"=>5, "x"=>0.4793000786428491, "y"=>0.7270552806619078, "point"=>{"company_id"=>5, "x"=>0.4793000786428491, "y"=>0.7270552806619078}}
+[31mUnpermitted parameter: :point. Context: { controller: PointsController, action: create, request: #<ActionDispatch::Request:0x000000010bc1cd78>, params: {"company_id"=>5, "x"=>0.4793000786428491, "y"=>0.7270552806619078, "controller"=>"points", "action"=>"create", "point"=>{"company_id"=>5, "x"=>0.4793000786428491, "y"=>0.7270552806619078}} }[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mCompany Load (0.7ms)[0m  [1m[34mSELECT "companies".* FROM "companies" WHERE "companies"."id" = ? LIMIT ?[0m  [["id", 5], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mPoint Create (0.1ms)[0m  [1m[32mINSERT INTO "points" ("company_id", "x", "y", "what", "info", "emotion", "meaning", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["company_id", 5], ["x", 0.4793000786428491], ["y", 0.7270552806619078], ["what", nil], ["info", nil], ["emotion", nil], ["meaning", nil], ["created_at", "2026-09-13 04:58:40.275776"], ["updated_at", "2026-09-13 04:58:40.275776"]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+Completed 201 Created in 5ms (Views: 0.1ms | ActiveRecord: 1.0ms (2 queries, 0 cached) | GC: 0.6ms)
+
+
+Started POST "/points" for 127.0.0.1 at 2026-09-13 13:58:40 +0900
+Processing by PointsController#create as JSON
+  Parameters: {"company_id"=>5, "x"=>0.5396865520728008, "y"=>0.4908450275794938, "point"=>{"company_id"=>5, "x"=>0.5396865520728008, "y"=>0.4908450275794938}}
+[31mUnpermitted parameter: :point. Context: { controller: PointsController, action: create, request: #<ActionDispatch::Request:0x000000010bc7d600>, params: {"company_id"=>5, "x"=>0.5396865520728008, "y"=>0.4908450275794938, "controller"=>"points", "action"=>"create", "point"=>{"company_id"=>5, "x"=>0.5396865520728008, "y"=>0.4908450275794938}} }[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mCompany Load (1.0ms)[0m  [1m[34mSELECT "companies".* FROM "companies" WHERE "companies"."id" = ? LIMIT ?[0m  [["id", 5], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mPoint Create (0.1ms)[0m  [1m[32mINSERT INTO "points" ("company_id", "x", "y", "what", "info", "emotion", "meaning", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["company_id", 5], ["x", 0.5396865520728008], ["y", 0.4908450275794938], ["what", nil], ["info", nil], ["emotion", nil], ["meaning", nil], ["created_at", "2026-09-13 04:58:40.846029"], ["updated_at", "2026-09-13 04:58:40.846029"]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+Completed 201 Created in 6ms (Views: 0.1ms | ActiveRecord: 1.3ms (2 queries, 0 cached) | GC: 0.3ms)
+
+
+Started POST "/points" for 127.0.0.1 at 2026-09-13 13:58:41 +0900
+Processing by PointsController#create as JSON
+  Parameters: {"company_id"=>5, "x"=>0.9343051342545782, "y"=>0.6061381272982911, "point"=>{"company_id"=>5, "x"=>0.9343051342545782, "y"=>0.6061381272982911}}
+[31mUnpermitted parameter: :point. Context: { controller: PointsController, action: create, request: #<ActionDispatch::Request:0x000000010bd47220>, params: {"company_id"=>5, "x"=>0.9343051342545782, "y"=>0.6061381272982911, "controller"=>"points", "action"=>"create", "point"=>{"company_id"=>5, "x"=>0.9343051342545782, "y"=>0.6061381272982911}} }[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mCompany Load (1.3ms)[0m  [1m[34mSELECT "companies".* FROM "companies" WHERE "companies"."id" = ? LIMIT ?[0m  [["id", 5], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mPoint Create (0.1ms)[0m  [1m[32mINSERT INTO "points" ("company_id", "x", "y", "what", "info", "emotion", "meaning", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["company_id", 5], ["x", 0.9343051342545782], ["y", 0.6061381272982911], ["what", nil], ["info", nil], ["emotion", nil], ["meaning", nil], ["created_at", "2026-09-13 04:58:41.947033"], ["updated_at", "2026-09-13 04:58:41.947033"]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+Completed 201 Created in 6ms (Views: 0.1ms | ActiveRecord: 1.6ms (2 queries, 0 cached) | GC: 0.2ms)
+
+
+Started GET "/" for ::1 at 2026-09-13 14:01:12 +0900
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.4ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 6.8ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 39.9ms | GC: 0.0ms)
+Completed 200 OK in 65ms (Views: 41.4ms | ActiveRecord: 2.1ms (2 queries, 0 cached) | GC: 0.6ms)
+
+
+Started GET "/manifest.json" for ::1 at 2026-09-13 14:01:12 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/manifest.json" for ::1 at 2026-09-13 14:01:12 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for ::1 at 2026-09-13 14:05:14 +0900
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.4ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 7.0ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 73.7ms | GC: 0.0ms)
+Completed 200 OK in 98ms (Views: 75.4ms | ActiveRecord: 1.8ms (2 queries, 0 cached) | GC: 0.6ms)
+
+
+Started GET "/manifest.json" for ::1 at 2026-09-13 14:05:14 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/manifest.json" for ::1 at 2026-09-13 14:05:15 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for ::1 at 2026-09-13 14:05:39 +0900
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.1ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.0ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 1.5ms | GC: 0.1ms)
+  Rendered layout layouts/application.html.erb (Duration: 10.9ms | GC: 0.4ms)
+Completed 200 OK in 12ms (Views: 11.1ms | ActiveRecord: 0.1ms (2 queries, 0 cached) | GC: 0.4ms)
+
+
+Started GET "/manifest.json" for ::1 at 2026-09-13 14:05:39 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for ::1 at 2026-09-13 14:18:03 +0900
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by MapController#show as */*
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.4ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 6.6ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 70.0ms | GC: 0.0ms)
+Completed 200 OK in 96ms (Views: 71.5ms | ActiveRecord: 1.9ms (2 queries, 0 cached) | GC: 0.5ms)
+
+
+Started GET "/" for ::1 at 2026-09-13 14:18:42 +0900
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.1ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.0ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 1.8ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 4.5ms | GC: 0.0ms)
+Completed 200 OK in 7ms (Views: 4.7ms | ActiveRecord: 0.2ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/manifest.json" for ::1 at 2026-09-13 14:18:42 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/manifest.json" for ::1 at 2026-09-13 14:18:42 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for 127.0.0.1 at 2026-09-13 14:39:36 +0900
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.4ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.5ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 8.2ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 78.8ms | GC: 0.0ms)
+Completed 200 OK in 135ms (Views: 80.5ms | ActiveRecord: 2.6ms (2 queries, 0 cached) | GC: 0.9ms)
+
+
+Started GET "/manifest.json" for 127.0.0.1 at 2026-09-13 14:39:36 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for ::1 at 2026-09-13 14:44:27 +0900
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by MapController#show as */*
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.1ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 7.0ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 72.2ms | GC: 0.0ms)
+Completed 200 OK in 98ms (Views: 74.3ms | ActiveRecord: 1.6ms (2 queries, 0 cached) | GC: 0.6ms)
+
+
+Started GET "/" for ::1 at 2026-09-13 14:44:55 +0900
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.2ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.0ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 1.9ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 3.6ms | GC: 0.0ms)
+Completed 200 OK in 5ms (Views: 3.7ms | ActiveRecord: 0.2ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/manifest.json" for ::1 at 2026-09-13 14:44:55 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/manifest.json" for ::1 at 2026-09-13 14:44:56 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for 127.0.0.1 at 2026-09-13 14:48:05 +0900
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.4ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 7.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 86.1ms | GC: 0.0ms)
+Completed 200 OK in 116ms (Views: 87.9ms | ActiveRecord: 2.1ms (2 queries, 0 cached) | GC: 0.6ms)
+
+
+Started GET "/manifest.json" for 127.0.0.1 at 2026-09-13 14:48:05 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for ::1 at 2026-09-13 14:53:58 +0900
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by MapController#show as */*
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.1ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 6.0ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 73.6ms | GC: 0.0ms)
+Completed 200 OK in 97ms (Views: 75.4ms | ActiveRecord: 1.3ms (2 queries, 0 cached) | GC: 0.5ms)
+
+
+Started GET "/" for ::1 at 2026-09-13 14:54:00 +0900
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.1ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.0ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 1.6ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 2.8ms | GC: 0.0ms)
+Completed 200 OK in 4ms (Views: 3.0ms | ActiveRecord: 0.1ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/manifest.json" for ::1 at 2026-09-13 14:54:00 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/manifest.json" for ::1 at 2026-09-13 14:54:01 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for ::1 at 2026-09-13 14:54:38 +0900
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.1ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.0ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 1.6ms | GC: 0.1ms)
+  Rendered layout layouts/application.html.erb (Duration: 3.2ms | GC: 0.2ms)
+Completed 200 OK in 4ms (Views: 3.4ms | ActiveRecord: 0.1ms (2 queries, 0 cached) | GC: 0.2ms)
+
+
+Started GET "/manifest.json" for ::1 at 2026-09-13 14:54:38 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/manifest.json" for ::1 at 2026-09-13 14:54:40 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for ::1 at 2026-09-13 14:54:56 +0900
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.1ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.0ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 1.4ms | GC: 0.1ms)
+  Rendered layout layouts/application.html.erb (Duration: 10.8ms | GC: 0.3ms)
+Completed 200 OK in 12ms (Views: 10.9ms | ActiveRecord: 0.1ms (2 queries, 0 cached) | GC: 0.3ms)
+
+
+Started GET "/manifest.json" for ::1 at 2026-09-13 14:54:56 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for ::1 at 2026-09-13 14:55:11 +0900
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.1ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.0ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 1.4ms | GC: 0.1ms)
+  Rendered layout layouts/application.html.erb (Duration: 2.5ms | GC: 0.1ms)
+Completed 200 OK in 3ms (Views: 2.6ms | ActiveRecord: 0.1ms (2 queries, 0 cached) | GC: 0.1ms)
+
+
+Started GET "/manifest.json" for ::1 at 2026-09-13 14:55:11 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for ::1 at 2026-09-13 14:55:42 +0900
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.1ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.0ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 1.5ms | GC: 0.1ms)
+  Rendered layout layouts/application.html.erb (Duration: 3.4ms | GC: 0.1ms)
+Completed 200 OK in 4ms (Views: 3.5ms | ActiveRecord: 0.1ms (2 queries, 0 cached) | GC: 0.1ms)
+
+
+Started GET "/manifest.json" for ::1 at 2026-09-13 14:55:42 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for ::1 at 2026-09-13 14:55:57 +0900
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.1ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.0ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 1.4ms | GC: 0.1ms)
+  Rendered layout layouts/application.html.erb (Duration: 2.5ms | GC: 0.2ms)
+Completed 200 OK in 3ms (Views: 2.6ms | ActiveRecord: 0.1ms (2 queries, 0 cached) | GC: 0.2ms)
+
+
+Started GET "/manifest.json" for ::1 at 2026-09-13 14:55:57 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for ::1 at 2026-09-13 14:56:15 +0900
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (4.6ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 9.9ms | GC: 0.5ms)
+  Rendered layout layouts/application.html.erb (Duration: 15.3ms | GC: 0.8ms)
+Completed 200 OK in 19ms (Views: 11.4ms | ActiveRecord: 4.6ms (2 queries, 0 cached) | GC: 0.8ms)
+
+
+Started GET "/manifest.json" for ::1 at 2026-09-13 14:56:15 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for ::1 at 2026-09-13 14:56:54 +0900
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.2ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 6.7ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 15.4ms | GC: 0.3ms)
+Completed 200 OK in 23ms (Views: 17.4ms | ActiveRecord: 0.3ms (2 queries, 0 cached) | GC: 0.8ms)
+
+
+Started GET "/manifest.json" for ::1 at 2026-09-13 14:56:54 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for ::1 at 2026-09-13 14:57:11 +0900
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.1ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.0ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 1.4ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 3.3ms | GC: 0.2ms)
+Completed 200 OK in 4ms (Views: 3.4ms | ActiveRecord: 0.2ms (2 queries, 0 cached) | GC: 0.3ms)
+
+
+Started GET "/manifest.json" for ::1 at 2026-09-13 14:57:11 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for 127.0.0.1 at 2026-09-13 14:58:13 +0900
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.4ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 7.3ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 43.8ms | GC: 0.0ms)
+Completed 200 OK in 75ms (Views: 46.5ms | ActiveRecord: 2.1ms (2 queries, 0 cached) | GC: 0.5ms)
+
+
+Started GET "/manifest.json" for 127.0.0.1 at 2026-09-13 14:58:13 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started POST "/points" for 127.0.0.1 at 2026-09-13 14:58:22 +0900
+Processing by PointsController#create as JSON
+  Parameters: {"company_id"=>5, "x"=>0.4729805639815751, "y"=>0.31509335117888804, "point"=>{"company_id"=>5, "x"=>0.4729805639815751, "y"=>0.31509335117888804}}
+[31mUnpermitted parameter: :point. Context: { controller: PointsController, action: create, request: #<ActionDispatch::Request:0x000000010f04a690>, params: {"company_id"=>5, "x"=>0.4729805639815751, "y"=>0.31509335117888804, "controller"=>"points", "action"=>"create", "point"=>{"company_id"=>5, "x"=>0.4729805639815751, "y"=>0.31509335117888804}} }[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mCompany Load (0.9ms)[0m  [1m[34mSELECT "companies".* FROM "companies" WHERE "companies"."id" = ? LIMIT ?[0m  [["id", 5], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mPoint Create (0.5ms)[0m  [1m[32mINSERT INTO "points" ("company_id", "x", "y", "what", "info", "emotion", "meaning", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["company_id", 5], ["x", 0.4729805639815751], ["y", 0.31509335117888804], ["what", nil], ["info", nil], ["emotion", nil], ["meaning", nil], ["created_at", "2026-09-13 05:58:22.536687"], ["updated_at", "2026-09-13 05:58:22.536687"]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+Completed 201 Created in 16ms (Views: 0.3ms | ActiveRecord: 1.9ms (2 queries, 0 cached) | GC: 0.8ms)
+
+
+Started POST "/points" for 127.0.0.1 at 2026-09-13 14:58:23 +0900
+Processing by PointsController#create as JSON
+  Parameters: {"company_id"=>5, "x"=>0.45542635658914726, "y"=>0.5569276579061215, "point"=>{"company_id"=>5, "x"=>0.45542635658914726, "y"=>0.5569276579061215}}
+[31mUnpermitted parameter: :point. Context: { controller: PointsController, action: create, request: #<ActionDispatch::Request:0x000000010f1491e0>, params: {"company_id"=>5, "x"=>0.45542635658914726, "y"=>0.5569276579061215, "controller"=>"points", "action"=>"create", "point"=>{"company_id"=>5, "x"=>0.45542635658914726, "y"=>0.5569276579061215}} }[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mCompany Load (1.0ms)[0m  [1m[34mSELECT "companies".* FROM "companies" WHERE "companies"."id" = ? LIMIT ?[0m  [["id", 5], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mPoint Create (0.2ms)[0m  [1m[32mINSERT INTO "points" ("company_id", "x", "y", "what", "info", "emotion", "meaning", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["company_id", 5], ["x", 0.45542635658914726], ["y", 0.5569276579061215], ["what", nil], ["info", nil], ["emotion", nil], ["meaning", nil], ["created_at", "2026-09-13 05:58:23.931944"], ["updated_at", "2026-09-13 05:58:23.931944"]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+Completed 201 Created in 7ms (Views: 0.2ms | ActiveRecord: 1.5ms (2 queries, 0 cached) | GC: 0.1ms)
+
+
+Started GET "/" for 127.0.0.1 at 2026-09-13 14:59:14 +0900
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.1ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 7.4ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 42.0ms | GC: 0.0ms)
+Completed 200 OK in 71ms (Views: 44.1ms | ActiveRecord: 1.8ms (2 queries, 0 cached) | GC: 0.6ms)
+
+
+Started GET "/manifest.json" for 127.0.0.1 at 2026-09-13 14:59:14 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for ::1 at 2026-09-13 15:04:28 +0900
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by MapController#show as */*
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.2ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 7.8ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 70.9ms | GC: 0.0ms)
+Completed 200 OK in 95ms (Views: 72.6ms | ActiveRecord: 1.7ms (2 queries, 0 cached) | GC: 0.6ms)
+
+
+Started GET "/" for ::1 at 2026-09-13 15:04:44 +0900
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.1ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.0ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 2.0ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 3.7ms | GC: 0.0ms)
+Completed 200 OK in 5ms (Views: 3.9ms | ActiveRecord: 0.2ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/manifest.json" for ::1 at 2026-09-13 15:04:45 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/manifest.json" for ::1 at 2026-09-13 15:04:45 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for ::1 at 2026-09-13 15:05:06 +0900
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.1ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.0ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 1.4ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 11.7ms | GC: 0.3ms)
+Completed 200 OK in 13ms (Views: 11.9ms | ActiveRecord: 0.1ms (2 queries, 0 cached) | GC: 0.4ms)
+
+
+Started GET "/manifest.json" for ::1 at 2026-09-13 15:05:06 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/manifest.json" for ::1 at 2026-09-13 15:05:06 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for 127.0.0.1 at 2026-09-13 15:07:48 +0900
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.4ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 7.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 40.6ms | GC: 0.0ms)
+Completed 200 OK in 69ms (Views: 42.5ms | ActiveRecord: 2.1ms (2 queries, 0 cached) | GC: 0.6ms)
+
+
+Started GET "/manifest.json" for 127.0.0.1 at 2026-09-13 15:07:48 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for ::1 at 2026-09-13 15:15:53 +0900
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by MapController#show as */*
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.2ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 6.3ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 71.1ms | GC: 0.0ms)
+Completed 200 OK in 94ms (Views: 72.8ms | ActiveRecord: 1.4ms (2 queries, 0 cached) | GC: 0.6ms)
+
+
+Started GET "/" for ::1 at 2026-09-13 15:15:54 +0900
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.1ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.0ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 2.6ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 5.1ms | GC: 0.0ms)
+Completed 200 OK in 7ms (Views: 5.3ms | ActiveRecord: 0.2ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/manifest.json" for ::1 at 2026-09-13 15:15:54 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/manifest.json" for ::1 at 2026-09-13 15:15:55 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for 127.0.0.1 at 2026-09-13 15:25:27 +0900
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.4ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 7.3ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 42.9ms | GC: 0.0ms)
+Completed 200 OK in 76ms (Views: 45.1ms | ActiveRecord: 2.2ms (2 queries, 0 cached) | GC: 0.7ms)
+
+
+Started GET "/manifest.json" for 127.0.0.1 at 2026-09-13 15:25:27 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for 127.0.0.1 at 2026-09-13 15:26:30 +0900
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.1ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 6.9ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 84.9ms | GC: 0.0ms)
+Completed 200 OK in 113ms (Views: 87.1ms | ActiveRecord: 1.8ms (2 queries, 0 cached) | GC: 0.6ms)
+
+
+Started GET "/manifest.json" for 127.0.0.1 at 2026-09-13 15:26:31 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started POST "/companies" for 127.0.0.1 at 2026-09-13 15:26:51 +0900
+Processing by CompaniesController#create as JSON
+  Parameters: {"company"=>{"name"=>"ええ"}}
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/models/company.rb:32:in `assign_color_index'
+  [1m[36mCompany Count (0.8ms)[0m  [1m[34mSELECT COUNT(*) FROM "companies"[0m
+  ↳ app/models/company.rb:32:in `assign_color_index'
+  [1m[36mCompany Create (0.8ms)[0m  [1m[32mINSERT INTO "companies" ("name", "color_index", "created_at", "updated_at") VALUES (?, ?, ?, ?) RETURNING "id"[0m  [["name", "ええ"], ["color_index", 1], ["created_at", "2026-09-13 06:26:51.324322"], ["updated_at", "2026-09-13 06:26:51.324322"]]
+  ↳ app/controllers/companies_controller.rb:4:in `create'
+  [1m[36mTRANSACTION (0.6ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/companies_controller.rb:4:in `create'
+Completed 201 Created in 8ms (Views: 0.2ms | ActiveRecord: 2.2ms (2 queries, 0 cached) | GC: 0.4ms)
+
+
+Started POST "/points" for 127.0.0.1 at 2026-09-13 15:26:56 +0900
+Processing by PointsController#create as JSON
+  Parameters: {"company_id"=>6, "x"=>0.36695315133131107, "y"=>0.7172131867834739, "point"=>{"company_id"=>6, "x"=>0.36695315133131107, "y"=>0.7172131867834739}}
+[31mUnpermitted parameter: :point. Context: { controller: PointsController, action: create, request: #<ActionDispatch::Request:0x000000010d56a528>, params: {"company_id"=>6, "x"=>0.36695315133131107, "y"=>0.7172131867834739, "controller"=>"points", "action"=>"create", "point"=>{"company_id"=>6, "x"=>0.36695315133131107, "y"=>0.7172131867834739}} }[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mCompany Load (0.9ms)[0m  [1m[34mSELECT "companies".* FROM "companies" WHERE "companies"."id" = ? LIMIT ?[0m  [["id", 6], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mPoint Create (0.3ms)[0m  [1m[32mINSERT INTO "points" ("company_id", "x", "y", "what", "info", "emotion", "meaning", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["company_id", 6], ["x", 0.36695315133131107], ["y", 0.7172131867834739], ["what", nil], ["info", nil], ["emotion", nil], ["meaning", nil], ["created_at", "2026-09-13 06:26:56.688200"], ["updated_at", "2026-09-13 06:26:56.688200"]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+Completed 201 Created in 15ms (Views: 0.1ms | ActiveRecord: 1.4ms (2 queries, 0 cached) | GC: 0.4ms)
+
+
+Started POST "/points" for 127.0.0.1 at 2026-09-13 15:26:57 +0900
+Processing by PointsController#create as JSON
+  Parameters: {"company_id"=>6, "x"=>0.35290978541736884, "y"=>0.40507820949599815, "point"=>{"company_id"=>6, "x"=>0.35290978541736884, "y"=>0.40507820949599815}}
+[31mUnpermitted parameter: :point. Context: { controller: PointsController, action: create, request: #<ActionDispatch::Request:0x000000010defb6c8>, params: {"company_id"=>6, "x"=>0.35290978541736884, "y"=>0.40507820949599815, "controller"=>"points", "action"=>"create", "point"=>{"company_id"=>6, "x"=>0.35290978541736884, "y"=>0.40507820949599815}} }[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mCompany Load (1.0ms)[0m  [1m[34mSELECT "companies".* FROM "companies" WHERE "companies"."id" = ? LIMIT ?[0m  [["id", 6], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mPoint Create (0.1ms)[0m  [1m[32mINSERT INTO "points" ("company_id", "x", "y", "what", "info", "emotion", "meaning", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["company_id", 6], ["x", 0.35290978541736884], ["y", 0.40507820949599815], ["what", nil], ["info", nil], ["emotion", nil], ["meaning", nil], ["created_at", "2026-09-13 06:26:57.245442"], ["updated_at", "2026-09-13 06:26:57.245442"]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+Completed 201 Created in 7ms (Views: 0.2ms | ActiveRecord: 1.6ms (2 queries, 0 cached) | GC: 0.3ms)
+
+
+Started POST "/points" for 127.0.0.1 at 2026-09-13 15:26:57 +0900
+Processing by PointsController#create as JSON
+  Parameters: {"company_id"=>6, "x"=>0.5460060667340748, "y"=>0.6103561675319057, "point"=>{"company_id"=>6, "x"=>0.5460060667340748, "y"=>0.6103561675319057}}
+[31mUnpermitted parameter: :point. Context: { controller: PointsController, action: create, request: #<ActionDispatch::Request:0x000000010df5be10>, params: {"company_id"=>6, "x"=>0.5460060667340748, "y"=>0.6103561675319057, "controller"=>"points", "action"=>"create", "point"=>{"company_id"=>6, "x"=>0.5460060667340748, "y"=>0.6103561675319057}} }[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mCompany Load (1.1ms)[0m  [1m[34mSELECT "companies".* FROM "companies" WHERE "companies"."id" = ? LIMIT ?[0m  [["id", 6], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mPoint Create (0.1ms)[0m  [1m[32mINSERT INTO "points" ("company_id", "x", "y", "what", "info", "emotion", "meaning", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["company_id", 6], ["x", 0.5460060667340748], ["y", 0.6103561675319057], ["what", nil], ["info", nil], ["emotion", nil], ["meaning", nil], ["created_at", "2026-09-13 06:26:57.917858"], ["updated_at", "2026-09-13 06:26:57.917858"]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+Completed 201 Created in 6ms (Views: 0.2ms | ActiveRecord: 1.4ms (2 queries, 0 cached) | GC: 0.4ms)
+
+
+Started POST "/points" for 127.0.0.1 at 2026-09-13 15:27:07 +0900
+Processing by PointsController#create as JSON
+  Parameters: {"company_id"=>6, "x"=>0.5712841253791708, "y"=>0.36570983398226264, "point"=>{"company_id"=>6, "x"=>0.5712841253791708, "y"=>0.36570983398226264}}
+[31mUnpermitted parameter: :point. Context: { controller: PointsController, action: create, request: #<ActionDispatch::Request:0x000000010e039da0>, params: {"company_id"=>6, "x"=>0.5712841253791708, "y"=>0.36570983398226264, "controller"=>"points", "action"=>"create", "point"=>{"company_id"=>6, "x"=>0.5712841253791708, "y"=>0.36570983398226264}} }[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mCompany Load (1.4ms)[0m  [1m[34mSELECT "companies".* FROM "companies" WHERE "companies"."id" = ? LIMIT ?[0m  [["id", 6], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mPoint Create (0.1ms)[0m  [1m[32mINSERT INTO "points" ("company_id", "x", "y", "what", "info", "emotion", "meaning", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["company_id", 6], ["x", 0.5712841253791708], ["y", 0.36570983398226264], ["what", nil], ["info", nil], ["emotion", nil], ["meaning", nil], ["created_at", "2026-09-13 06:27:07.648670"], ["updated_at", "2026-09-13 06:27:07.648670"]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mTRANSACTION (0.6ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+Completed 201 Created in 7ms (Views: 0.1ms | ActiveRecord: 2.2ms (2 queries, 0 cached) | GC: 0.9ms)
+
+
+Started PATCH "/points/11" for 127.0.0.1 at 2026-09-13 15:27:12 +0900
+Processing by PointsController#update as JSON
+  Parameters: {"x"=>0.17736771149309066, "y"=>0.7260358969728017, "id"=>"11", "point"=>{"x"=>0.17736771149309066, "y"=>0.7260358969728017}}
+  [1m[36mPoint Load (0.2ms)[0m  [1m[34mSELECT "points".* FROM "points" WHERE "points"."id" = ? LIMIT ?[0m  [["id", 11], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:12:in `update'
+[31mUnpermitted parameters: :id, :point. Context: { controller: PointsController, action: update, request: #<ActionDispatch::Request:0x000000010e0a0e38>, params: {"x"=>0.17736771149309066, "y"=>0.7260358969728017, "controller"=>"points", "action"=>"update", "id"=>"11", "point"=>{"x"=>0.17736771149309066, "y"=>0.7260358969728017}} }[0m
+Completed 200 OK in 4ms (Views: 0.2ms | ActiveRecord: 0.2ms (1 query, 0 cached) | GC: 0.4ms)
+
+
+Started POST "/points" for 127.0.0.1 at 2026-09-13 15:27:13 +0900
+Processing by PointsController#create as JSON
+  Parameters: {"company_id"=>5, "x"=>0.2251151556004943, "y"=>0.6075441407094959, "point"=>{"company_id"=>5, "x"=>0.2251151556004943, "y"=>0.6075441407094959}}
+[31mUnpermitted parameter: :point. Context: { controller: PointsController, action: create, request: #<ActionDispatch::Request:0x000000010e0c1a20>, params: {"company_id"=>5, "x"=>0.2251151556004943, "y"=>0.6075441407094959, "controller"=>"points", "action"=>"create", "point"=>{"company_id"=>5, "x"=>0.2251151556004943, "y"=>0.6075441407094959}} }[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mCompany Load (1.2ms)[0m  [1m[34mSELECT "companies".* FROM "companies" WHERE "companies"."id" = ? LIMIT ?[0m  [["id", 5], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mPoint Create (0.2ms)[0m  [1m[32mINSERT INTO "points" ("company_id", "x", "y", "what", "info", "emotion", "meaning", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["company_id", 5], ["x", 0.2251151556004943], ["y", 0.6075441407094959], ["what", nil], ["info", nil], ["emotion", nil], ["meaning", nil], ["created_at", "2026-09-13 06:27:13.662101"], ["updated_at", "2026-09-13 06:27:13.662101"]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+Completed 201 Created in 8ms (Views: 0.2ms | ActiveRecord: 1.5ms (2 queries, 0 cached) | GC: 0.4ms)
+
+
+Started POST "/companies" for 127.0.0.1 at 2026-09-13 15:27:25 +0900
+Processing by CompaniesController#create as JSON
+  Parameters: {"company"=>{"name"=>"おお"}}
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/models/company.rb:32:in `assign_color_index'
+  [1m[36mCompany Count (0.9ms)[0m  [1m[34mSELECT COUNT(*) FROM "companies"[0m
+  ↳ app/models/company.rb:32:in `assign_color_index'
+  [1m[36mCompany Create (0.2ms)[0m  [1m[32mINSERT INTO "companies" ("name", "color_index", "created_at", "updated_at") VALUES (?, ?, ?, ?) RETURNING "id"[0m  [["name", "おお"], ["color_index", 2], ["created_at", "2026-09-13 06:27:25.520069"], ["updated_at", "2026-09-13 06:27:25.520069"]]
+  ↳ app/controllers/companies_controller.rb:4:in `create'
+  [1m[36mTRANSACTION (0.6ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/companies_controller.rb:4:in `create'
+Completed 201 Created in 6ms (Views: 0.1ms | ActiveRecord: 1.7ms (2 queries, 0 cached) | GC: 0.3ms)
+
+
+Started POST "/points" for 127.0.0.1 at 2026-09-13 15:27:27 +0900
+Processing by PointsController#create as JSON
+  Parameters: {"company_id"=>7, "x"=>0.41118975396022917, "y"=>0.7312733208955224, "point"=>{"company_id"=>7, "x"=>0.41118975396022917, "y"=>0.7312733208955224}}
+[31mUnpermitted parameter: :point. Context: { controller: PointsController, action: create, request: #<ActionDispatch::Request:0x000000010e1d1af0>, params: {"company_id"=>7, "x"=>0.41118975396022917, "y"=>0.7312733208955224, "controller"=>"points", "action"=>"create", "point"=>{"company_id"=>7, "x"=>0.41118975396022917, "y"=>0.7312733208955224}} }[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mCompany Load (3.3ms)[0m  [1m[34mSELECT "companies".* FROM "companies" WHERE "companies"."id" = ? LIMIT ?[0m  [["id", 7], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mPoint Create (0.1ms)[0m  [1m[32mINSERT INTO "points" ("company_id", "x", "y", "what", "info", "emotion", "meaning", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["company_id", 7], ["x", 0.41118975396022917], ["y", 0.7312733208955224], ["what", nil], ["info", nil], ["emotion", nil], ["meaning", nil], ["created_at", "2026-09-13 06:27:27.984601"], ["updated_at", "2026-09-13 06:27:27.984601"]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+Completed 201 Created in 16ms (Views: 0.3ms | ActiveRecord: 3.6ms (2 queries, 0 cached) | GC: 9.2ms)
+
+
+Started POST "/points" for 127.0.0.1 at 2026-09-13 15:27:28 +0900
+Processing by PointsController#create as JSON
+  Parameters: {"company_id"=>7, "x"=>0.560049432648017, "y"=>0.7453334550075708, "point"=>{"company_id"=>7, "x"=>0.560049432648017, "y"=>0.7453334550075708}}
+[31mUnpermitted parameter: :point. Context: { controller: PointsController, action: create, request: #<ActionDispatch::Request:0x000000010de3a4c8>, params: {"company_id"=>7, "x"=>0.560049432648017, "y"=>0.7453334550075708, "controller"=>"points", "action"=>"create", "point"=>{"company_id"=>7, "x"=>0.560049432648017, "y"=>0.7453334550075708}} }[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mCompany Load (2.8ms)[0m  [1m[34mSELECT "companies".* FROM "companies" WHERE "companies"."id" = ? LIMIT ?[0m  [["id", 7], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mPoint Create (0.1ms)[0m  [1m[32mINSERT INTO "points" ("company_id", "x", "y", "what", "info", "emotion", "meaning", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["company_id", 7], ["x", 0.560049432648017], ["y", 0.7453334550075708], ["what", nil], ["info", nil], ["emotion", nil], ["meaning", nil], ["created_at", "2026-09-13 06:27:28.488631"], ["updated_at", "2026-09-13 06:27:28.488631"]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+Completed 201 Created in 17ms (Views: 0.2ms | ActiveRecord: 3.1ms (2 queries, 0 cached) | GC: 10.9ms)
+
+
+Started POST "/points" for 127.0.0.1 at 2026-09-13 15:27:29 +0900
+Processing by PointsController#create as JSON
+  Parameters: {"company_id"=>7, "x"=>0.6035838669812381, "y"=>0.6694087308025092, "point"=>{"company_id"=>7, "x"=>0.6035838669812381, "y"=>0.6694087308025092}}
+[31mUnpermitted parameter: :point. Context: { controller: PointsController, action: create, request: #<ActionDispatch::Request:0x000000010d312460>, params: {"company_id"=>7, "x"=>0.6035838669812381, "y"=>0.6694087308025092, "controller"=>"points", "action"=>"create", "point"=>{"company_id"=>7, "x"=>0.6035838669812381, "y"=>0.6694087308025092}} }[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mCompany Load (5.8ms)[0m  [1m[34mSELECT "companies".* FROM "companies" WHERE "companies"."id" = ? LIMIT ?[0m  [["id", 7], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mPoint Create (0.1ms)[0m  [1m[32mINSERT INTO "points" ("company_id", "x", "y", "what", "info", "emotion", "meaning", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["company_id", 7], ["x", 0.6035838669812381], ["y", 0.6694087308025092], ["what", nil], ["info", nil], ["emotion", nil], ["meaning", nil], ["created_at", "2026-09-13 06:27:29.477186"], ["updated_at", "2026-09-13 06:27:29.477186"]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+Completed 201 Created in 32ms (Views: 0.1ms | ActiveRecord: 6.0ms (2 queries, 0 cached) | GC: 24.5ms)
+
+
+Started GET "/" for ::1 at 2026-09-13 15:29:44 +0900
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by MapController#show as */*
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.1ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 6.5ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 66.0ms | GC: 0.0ms)
+Completed 200 OK in 91ms (Views: 68.0ms | ActiveRecord: 2.0ms (2 queries, 0 cached) | GC: 0.7ms)
+
+
+Started GET "/" for ::1 at 2026-09-13 15:30:38 +0900
+Processing by MapController#show as */*
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.1ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.0ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 1.6ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 3.4ms | GC: 0.0ms)
+Completed 200 OK in 5ms (Views: 3.7ms | ActiveRecord: 0.1ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started POST "/companies" for ::1 at 2026-09-13 15:30:38 +0900
+Processing by CompaniesController#create as JSON
+  Parameters: {"company"=>{"name"=>"B社 Future Horizon"}}
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/models/company.rb:32:in `assign_color_index'
+  [1m[36mCompany Count (0.6ms)[0m  [1m[34mSELECT COUNT(*) FROM "companies"[0m
+  ↳ app/models/company.rb:32:in `assign_color_index'
+  [1m[36mCompany Create (0.1ms)[0m  [1m[32mINSERT INTO "companies" ("name", "color_index", "created_at", "updated_at") VALUES (?, ?, ?, ?) RETURNING "id"[0m  [["name", "B社 Future Horizon"], ["color_index", 3], ["created_at", "2026-09-13 06:30:38.534723"], ["updated_at", "2026-09-13 06:30:38.534723"]]
+  ↳ app/controllers/companies_controller.rb:4:in `create'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/companies_controller.rb:4:in `create'
+Completed 201 Created in 6ms (Views: 0.1ms | ActiveRecord: 1.0ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started POST "/points" for ::1 at 2026-09-13 15:30:38 +0900
+Processing by PointsController#create as JSON
+  Parameters: {"company_id"=>8, "x"=>0.2, "y"=>0.3, "point"=>{"company_id"=>8, "x"=>0.2, "y"=>0.3}}
+[31mUnpermitted parameter: :point. Context: { controller: PointsController, action: create, request: #<ActionDispatch::Request:0x000000010e832868>, params: {"company_id"=>8, "x"=>0.2, "y"=>0.3, "controller"=>"points", "action"=>"create", "point"=>{"company_id"=>8, "x"=>0.2, "y"=>0.3}} }[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mCompany Load (0.7ms)[0m  [1m[34mSELECT "companies".* FROM "companies" WHERE "companies"."id" = ? LIMIT ?[0m  [["id", 8], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mPoint Create (0.1ms)[0m  [1m[32mINSERT INTO "points" ("company_id", "x", "y", "what", "info", "emotion", "meaning", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["company_id", 8], ["x", 0.2], ["y", 0.3], ["what", nil], ["info", nil], ["emotion", nil], ["meaning", nil], ["created_at", "2026-09-13 06:30:38.715889"], ["updated_at", "2026-09-13 06:30:38.715889"]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+Completed 201 Created in 9ms (Views: 0.1ms | ActiveRecord: 0.9ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started POST "/points" for ::1 at 2026-09-13 15:30:38 +0900
+Processing by PointsController#create as JSON
+  Parameters: {"company_id"=>8, "x"=>0.8, "y"=>0.6, "point"=>{"company_id"=>8, "x"=>0.8, "y"=>0.6}}
+[31mUnpermitted parameter: :point. Context: { controller: PointsController, action: create, request: #<ActionDispatch::Request:0x000000010e913cc8>, params: {"company_id"=>8, "x"=>0.8, "y"=>0.6, "controller"=>"points", "action"=>"create", "point"=>{"company_id"=>8, "x"=>0.8, "y"=>0.6}} }[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mCompany Load (0.6ms)[0m  [1m[34mSELECT "companies".* FROM "companies" WHERE "companies"."id" = ? LIMIT ?[0m  [["id", 8], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mPoint Create (0.1ms)[0m  [1m[32mINSERT INTO "points" ("company_id", "x", "y", "what", "info", "emotion", "meaning", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["company_id", 8], ["x", 0.8], ["y", 0.6], ["what", nil], ["info", nil], ["emotion", nil], ["meaning", nil], ["created_at", "2026-09-13 06:30:38.744357"], ["updated_at", "2026-09-13 06:30:38.744357"]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+Completed 201 Created in 14ms (Views: 0.1ms | ActiveRecord: 0.7ms (2 queries, 0 cached) | GC: 10.8ms)
+
+
+Started GET "/" for ::1 at 2026-09-13 15:30:46 +0900
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.1ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 2.1ms | GC: 0.2ms)
+  Rendered layout layouts/application.html.erb (Duration: 3.6ms | GC: 0.2ms)
+Completed 200 OK in 7ms (Views: 3.7ms | ActiveRecord: 0.2ms (2 queries, 0 cached) | GC: 0.2ms)
+
+
+Started GET "/manifest.json" for ::1 at 2026-09-13 15:30:46 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/manifest.json" for ::1 at 2026-09-13 15:30:47 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for ::1 at 2026-09-13 15:31:09 +0900
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.1ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.0ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 1.5ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 3.3ms | GC: 0.3ms)
+Completed 200 OK in 4ms (Views: 3.4ms | ActiveRecord: 0.1ms (2 queries, 0 cached) | GC: 0.3ms)
+
+
+Started GET "/manifest.json" for ::1 at 2026-09-13 15:31:09 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/manifest.json" for ::1 at 2026-09-13 15:31:10 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for ::1 at 2026-09-13 15:31:27 +0900
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.1ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 2.6ms | GC: 0.2ms)
+  Rendered layout layouts/application.html.erb (Duration: 5.4ms | GC: 0.2ms)
+Completed 200 OK in 7ms (Views: 5.7ms | ActiveRecord: 0.2ms (2 queries, 0 cached) | GC: 0.2ms)
+
+
+Started GET "/manifest.json" for ::1 at 2026-09-13 15:31:27 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+  [1m[36mCompany Load (0.3ms)[0m  [1m[34mSELECT "companies".* FROM "companies" WHERE "companies"."name" = ? LIMIT ?[0m  [["name", "B社 Future Horizon"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mPoint Load (0.3ms)[0m  [1m[34mSELECT "points".* FROM "points" WHERE "points"."company_id" = ?[0m  [["company_id", 8]]
+  [1m[36mPoint Destroy (0.1ms)[0m  [1m[31mDELETE FROM "points" WHERE "points"."id" = ?[0m  [["id", 28]]
+  [1m[36mPoint Destroy (0.0ms)[0m  [1m[31mDELETE FROM "points" WHERE "points"."id" = ?[0m  [["id", 29]]
+  [1m[36mCompany Destroy (0.1ms)[0m  [1m[31mDELETE FROM "companies" WHERE "companies"."id" = ?[0m  [["id", 8]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+Started GET "/" for ::1 at 2026-09-13 15:38:08 +0900
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by MapController#show as */*
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.4ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 7.2ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 73.5ms | GC: 0.0ms)
+Completed 200 OK in 101ms (Views: 75.2ms | ActiveRecord: 2.1ms (2 queries, 0 cached) | GC: 0.8ms)
+
+
+Started GET "/" for ::1 at 2026-09-13 15:38:30 +0900
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.1ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 2.8ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 8.1ms | GC: 0.0ms)
+Completed 200 OK in 10ms (Views: 8.3ms | ActiveRecord: 0.2ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/manifest.json" for ::1 at 2026-09-13 15:38:30 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/manifest.json" for ::1 at 2026-09-13 15:38:31 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for ::1 at 2026-09-13 15:38:58 +0900
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.3ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 3.5ms | GC: 0.4ms)
+  Rendered layout layouts/application.html.erb (Duration: 6.9ms | GC: 0.4ms)
+Completed 200 OK in 10ms (Views: 7.2ms | ActiveRecord: 0.3ms (2 queries, 0 cached) | GC: 0.4ms)
+
+
+Started GET "/manifest.json" for ::1 at 2026-09-13 15:38:58 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/manifest.json" for ::1 at 2026-09-13 15:38:59 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for 127.0.0.1 at 2026-09-13 15:40:00 +0900
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.4ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 7.6ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 42.0ms | GC: 0.0ms)
+Completed 200 OK in 69ms (Views: 43.7ms | ActiveRecord: 1.9ms (2 queries, 0 cached) | GC: 0.6ms)
+
+
+Started GET "/manifest.json" for 127.0.0.1 at 2026-09-13 15:40:00 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for 127.0.0.1 at 2026-09-13 15:41:50 +0900
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.1ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 6.9ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 85.2ms | GC: 0.0ms)
+Completed 200 OK in 112ms (Views: 87.2ms | ActiveRecord: 1.8ms (2 queries, 0 cached) | GC: 0.8ms)
+
+
+Started GET "/manifest.json" for 127.0.0.1 at 2026-09-13 15:41:50 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started PATCH "/points/24" for 127.0.0.1 at 2026-09-13 15:42:32 +0900
+Processing by PointsController#update as JSON
+  Parameters: {"x"=>0.2251151556004943, "y"=>0.6075441407094959, "id"=>"24", "point"=>{"x"=>0.2251151556004943, "y"=>0.6075441407094959}}
+  [1m[36mPoint Load (0.2ms)[0m  [1m[34mSELECT "points".* FROM "points" WHERE "points"."id" = ? LIMIT ?[0m  [["id", 24], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:12:in `update'
+[31mUnpermitted parameters: :id, :point. Context: { controller: PointsController, action: update, request: #<ActionDispatch::Request:0x000000010f0a9938>, params: {"x"=>0.2251151556004943, "y"=>0.6075441407094959, "controller"=>"points", "action"=>"update", "id"=>"24", "point"=>{"x"=>0.2251151556004943, "y"=>0.6075441407094959}} }[0m
+Completed 200 OK in 5ms (Views: 0.1ms | ActiveRecord: 0.2ms (1 query, 0 cached) | GC: 0.2ms)
+
+
+Started PATCH "/points/21" for 127.0.0.1 at 2026-09-13 15:43:58 +0900
+Processing by PointsController#update as JSON
+  Parameters: {"x"=>0.35406726596730703, "y"=>0.3947088605883624, "id"=>"21", "point"=>{"x"=>0.35406726596730703, "y"=>0.3947088605883624}}
+  [1m[36mPoint Load (0.4ms)[0m  [1m[34mSELECT "points".* FROM "points" WHERE "points"."id" = ? LIMIT ?[0m  [["id", 21], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:12:in `update'
+[31mUnpermitted parameters: :id, :point. Context: { controller: PointsController, action: update, request: #<ActionDispatch::Request:0x000000010f179f98>, params: {"x"=>0.35406726596730703, "y"=>0.3947088605883624, "controller"=>"points", "action"=>"update", "id"=>"21", "point"=>{"x"=>0.35406726596730703, "y"=>0.3947088605883624}} }[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/points_controller.rb:13:in `update'
+  [1m[36mPoint Update (1.5ms)[0m  [1m[33mUPDATE "points" SET "x" = ?, "y" = ?, "updated_at" = ? WHERE "points"."id" = ?[0m  [["x", 0.35406726596730703], ["y", 0.3947088605883624], ["updated_at", "2026-09-13 06:43:58.939381"], ["id", 21]]
+  ↳ app/controllers/points_controller.rb:13:in `update'
+  [1m[36mTRANSACTION (0.7ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/points_controller.rb:13:in `update'
+Completed 200 OK in 20ms (Views: 0.7ms | ActiveRecord: 2.6ms (2 queries, 0 cached) | GC: 0.7ms)
+
+
+Started PATCH "/points/21" for 127.0.0.1 at 2026-09-13 15:44:11 +0900
+Processing by PointsController#update as JSON
+  Parameters: {"what"=>"っっr", "info"=>"っっr", "emotion"=>"っっr", "meaning"=>"さfd", "id"=>"21", "point"=>{"what"=>"っっr", "info"=>"っっr", "emotion"=>"っっr", "meaning"=>"さfd"}}
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" WHERE "points"."id" = ? LIMIT ?[0m  [["id", 21], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:12:in `update'
+[31mUnpermitted parameters: :id, :point. Context: { controller: PointsController, action: update, request: #<ActionDispatch::Request:0x000000010faa8b28>, params: {"what"=>"っっr", "info"=>"っっr", "emotion"=>"っっr", "meaning"=>"さfd", "controller"=>"points", "action"=>"update", "id"=>"21", "point"=>{"what"=>"っっr", "info"=>"っっr", "emotion"=>"っっr", "meaning"=>"さfd"}} }[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/points_controller.rb:13:in `update'
+  [1m[36mPoint Update (0.6ms)[0m  [1m[33mUPDATE "points" SET "what" = ?, "info" = ?, "emotion" = ?, "meaning" = ?, "updated_at" = ? WHERE "points"."id" = ?[0m  [["what", "っっr"], ["info", "っっr"], ["emotion", "っっr"], ["meaning", "さfd"], ["updated_at", "2026-09-13 06:44:11.986306"], ["id", 21]]
+  ↳ app/controllers/points_controller.rb:13:in `update'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/points_controller.rb:13:in `update'
+Completed 200 OK in 4ms (Views: 0.1ms | ActiveRecord: 0.9ms (2 queries, 0 cached) | GC: 0.2ms)
+
+
+Started PATCH "/points/21" for 127.0.0.1 at 2026-09-13 15:44:17 +0900
+Processing by PointsController#update as JSON
+  Parameters: {"x"=>0.35406726596730703, "y"=>0.3947088605883624, "id"=>"21", "point"=>{"x"=>0.35406726596730703, "y"=>0.3947088605883624}}
+  [1m[36mPoint Load (0.2ms)[0m  [1m[34mSELECT "points".* FROM "points" WHERE "points"."id" = ? LIMIT ?[0m  [["id", 21], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:12:in `update'
+[31mUnpermitted parameters: :id, :point. Context: { controller: PointsController, action: update, request: #<ActionDispatch::Request:0x000000010fb12820>, params: {"x"=>0.35406726596730703, "y"=>0.3947088605883624, "controller"=>"points", "action"=>"update", "id"=>"21", "point"=>{"x"=>0.35406726596730703, "y"=>0.3947088605883624}} }[0m
+Completed 200 OK in 3ms (Views: 0.1ms | ActiveRecord: 0.2ms (1 query, 0 cached) | GC: 0.2ms)
+
+
+Started PATCH "/points/18" for 127.0.0.1 at 2026-09-13 15:44:23 +0900
+Processing by PointsController#update as JSON
+  Parameters: {"x"=>0.4729805639815751, "y"=>0.31509335117888804, "id"=>"18", "point"=>{"x"=>0.4729805639815751, "y"=>0.31509335117888804}}
+  [1m[36mPoint Load (0.2ms)[0m  [1m[34mSELECT "points".* FROM "points" WHERE "points"."id" = ? LIMIT ?[0m  [["id", 18], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:12:in `update'
+[31mUnpermitted parameters: :id, :point. Context: { controller: PointsController, action: update, request: #<ActionDispatch::Request:0x000000010fb42200>, params: {"x"=>0.4729805639815751, "y"=>0.31509335117888804, "controller"=>"points", "action"=>"update", "id"=>"18", "point"=>{"x"=>0.4729805639815751, "y"=>0.31509335117888804}} }[0m
+Completed 200 OK in 4ms (Views: 0.1ms | ActiveRecord: 0.2ms (1 query, 0 cached) | GC: 0.2ms)
+
+
+Started PATCH "/points/15" for 127.0.0.1 at 2026-09-13 15:44:34 +0900
+Processing by PointsController#update as JSON
+  Parameters: {"x"=>0.4793000786428491, "y"=>0.7270552806619078, "id"=>"15", "point"=>{"x"=>0.4793000786428491, "y"=>0.7270552806619078}}
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" WHERE "points"."id" = ? LIMIT ?[0m  [["id", 15], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:12:in `update'
+[31mUnpermitted parameters: :id, :point. Context: { controller: PointsController, action: update, request: #<ActionDispatch::Request:0x000000010fb71758>, params: {"x"=>0.4793000786428491, "y"=>0.7270552806619078, "controller"=>"points", "action"=>"update", "id"=>"15", "point"=>{"x"=>0.4793000786428491, "y"=>0.7270552806619078}} }[0m
+Completed 200 OK in 3ms (Views: 0.1ms | ActiveRecord: 0.1ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started PATCH "/points/16" for 127.0.0.1 at 2026-09-13 15:44:49 +0900
+Processing by PointsController#update as JSON
+  Parameters: {"x"=>0.5396865520728008, "y"=>0.4908450275794938, "id"=>"16", "point"=>{"x"=>0.5396865520728008, "y"=>0.4908450275794938}}
+  [1m[36mPoint Load (0.2ms)[0m  [1m[34mSELECT "points".* FROM "points" WHERE "points"."id" = ? LIMIT ?[0m  [["id", 16], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:12:in `update'
+[31mUnpermitted parameters: :id, :point. Context: { controller: PointsController, action: update, request: #<ActionDispatch::Request:0x000000010fc10fd8>, params: {"x"=>0.5396865520728008, "y"=>0.4908450275794938, "controller"=>"points", "action"=>"update", "id"=>"16", "point"=>{"x"=>0.5396865520728008, "y"=>0.4908450275794938}} }[0m
+Completed 200 OK in 4ms (Views: 0.2ms | ActiveRecord: 0.2ms (1 query, 0 cached) | GC: 0.7ms)
+
+
+Started PATCH "/points/16" for 127.0.0.1 at 2026-09-13 15:44:57 +0900
+Processing by PointsController#update as JSON
+  Parameters: {"what"=>"dfさ", "info"=>"fdさ", "emotion"=>"fdさg", "meaning"=>"", "id"=>"16", "point"=>{"what"=>"dfさ", "info"=>"fdさ", "emotion"=>"fdさg", "meaning"=>""}}
+  [1m[36mPoint Load (0.2ms)[0m  [1m[34mSELECT "points".* FROM "points" WHERE "points"."id" = ? LIMIT ?[0m  [["id", 16], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:12:in `update'
+[31mUnpermitted parameters: :id, :point. Context: { controller: PointsController, action: update, request: #<ActionDispatch::Request:0x000000010fc43910>, params: {"what"=>"dfさ", "info"=>"fdさ", "emotion"=>"fdさg", "meaning"=>"", "controller"=>"points", "action"=>"update", "id"=>"16", "point"=>{"what"=>"dfさ", "info"=>"fdさ", "emotion"=>"fdさg", "meaning"=>""}} }[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/points_controller.rb:13:in `update'
+  [1m[36mPoint Update (0.9ms)[0m  [1m[33mUPDATE "points" SET "what" = ?, "info" = ?, "emotion" = ?, "meaning" = ?, "updated_at" = ? WHERE "points"."id" = ?[0m  [["what", "dfさ"], ["info", "fdさ"], ["emotion", "fdさg"], ["meaning", ""], ["updated_at", "2026-09-13 06:44:57.084126"], ["id", 16]]
+  ↳ app/controllers/points_controller.rb:13:in `update'
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/points_controller.rb:13:in `update'
+Completed 200 OK in 7ms (Views: 0.1ms | ActiveRecord: 1.6ms (2 queries, 0 cached) | GC: 0.9ms)
+
+
+Started PATCH "/points/27" for 127.0.0.1 at 2026-09-13 15:45:01 +0900
+Processing by PointsController#update as JSON
+  Parameters: {"x"=>0.6035838669812381, "y"=>0.6694087308025092, "id"=>"27", "point"=>{"x"=>0.6035838669812381, "y"=>0.6694087308025092}}
+  [1m[36mPoint Load (0.2ms)[0m  [1m[34mSELECT "points".* FROM "points" WHERE "points"."id" = ? LIMIT ?[0m  [["id", 27], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:12:in `update'
+[31mUnpermitted parameters: :id, :point. Context: { controller: PointsController, action: update, request: #<ActionDispatch::Request:0x000000010fcb12f8>, params: {"x"=>0.6035838669812381, "y"=>0.6694087308025092, "controller"=>"points", "action"=>"update", "id"=>"27", "point"=>{"x"=>0.6035838669812381, "y"=>0.6694087308025092}} }[0m
+Completed 200 OK in 4ms (Views: 0.3ms | ActiveRecord: 0.2ms (1 query, 0 cached) | GC: 0.4ms)
+
+
+Started PATCH "/points/16" for 127.0.0.1 at 2026-09-13 15:45:04 +0900
+Processing by PointsController#update as JSON
+  Parameters: {"x"=>0.5396865520728008, "y"=>0.4908450275794938, "id"=>"16", "point"=>{"x"=>0.5396865520728008, "y"=>0.4908450275794938}}
+  [1m[36mPoint Load (0.2ms)[0m  [1m[34mSELECT "points".* FROM "points" WHERE "points"."id" = ? LIMIT ?[0m  [["id", 16], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:12:in `update'
+[31mUnpermitted parameters: :id, :point. Context: { controller: PointsController, action: update, request: #<ActionDispatch::Request:0x000000010fce0f80>, params: {"x"=>0.5396865520728008, "y"=>0.4908450275794938, "controller"=>"points", "action"=>"update", "id"=>"16", "point"=>{"x"=>0.5396865520728008, "y"=>0.4908450275794938}} }[0m
+Completed 200 OK in 3ms (Views: 0.1ms | ActiveRecord: 0.2ms (1 query, 0 cached) | GC: 0.5ms)
+
+
+Started PATCH "/points/16" for 127.0.0.1 at 2026-09-13 15:45:10 +0900
+Processing by PointsController#update as JSON
+  Parameters: {"what"=>"dfさ", "info"=>"fdさ", "emotion"=>"fdさg", "meaning"=>"さfdさfdさ", "id"=>"16", "point"=>{"what"=>"dfさ", "info"=>"fdさ", "emotion"=>"fdさg", "meaning"=>"さfdさfdさ"}}
+  [1m[36mPoint Load (0.2ms)[0m  [1m[34mSELECT "points".* FROM "points" WHERE "points"."id" = ? LIMIT ?[0m  [["id", 16], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:12:in `update'
+[31mUnpermitted parameters: :id, :point. Context: { controller: PointsController, action: update, request: #<ActionDispatch::Request:0x000000010fd10730>, params: {"what"=>"dfさ", "info"=>"fdさ", "emotion"=>"fdさg", "meaning"=>"さfdさfdさ", "controller"=>"points", "action"=>"update", "id"=>"16", "point"=>{"what"=>"dfさ", "info"=>"fdさ", "emotion"=>"fdさg", "meaning"=>"さfdさfdさ"}} }[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/points_controller.rb:13:in `update'
+  [1m[36mPoint Update (1.6ms)[0m  [1m[33mUPDATE "points" SET "meaning" = ?, "updated_at" = ? WHERE "points"."id" = ?[0m  [["meaning", "さfdさfdさ"], ["updated_at", "2026-09-13 06:45:10.930557"], ["id", 16]]
+  ↳ app/controllers/points_controller.rb:13:in `update'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/points_controller.rb:13:in `update'
+Completed 200 OK in 7ms (Views: 0.1ms | ActiveRecord: 1.9ms (2 queries, 0 cached) | GC: 0.5ms)
+
+
+Started PATCH "/points/23" for 127.0.0.1 at 2026-09-13 15:45:15 +0900
+Processing by PointsController#update as JSON
+  Parameters: {"x"=>0.5712841253791708, "y"=>0.36570983398226264, "id"=>"23", "point"=>{"x"=>0.5712841253791708, "y"=>0.36570983398226264}}
+  [1m[36mPoint Load (0.2ms)[0m  [1m[34mSELECT "points".* FROM "points" WHERE "points"."id" = ? LIMIT ?[0m  [["id", 23], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:12:in `update'
+[31mUnpermitted parameters: :id, :point. Context: { controller: PointsController, action: update, request: #<ActionDispatch::Request:0x000000010fde2668>, params: {"x"=>0.5712841253791708, "y"=>0.36570983398226264, "controller"=>"points", "action"=>"update", "id"=>"23", "point"=>{"x"=>0.5712841253791708, "y"=>0.36570983398226264}} }[0m
+Completed 200 OK in 3ms (Views: 0.1ms | ActiveRecord: 0.2ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started POST "/points" for 127.0.0.1 at 2026-09-13 15:45:29 +0900
+Processing by PointsController#create as JSON
+  Parameters: {"company_id"=>5, "x"=>0.35501629030446014, "y"=>0.4866269873458793, "point"=>{"company_id"=>5, "x"=>0.35501629030446014, "y"=>0.4866269873458793}}
+[31mUnpermitted parameter: :point. Context: { controller: PointsController, action: create, request: #<ActionDispatch::Request:0x000000010fe0b0e0>, params: {"company_id"=>5, "x"=>0.35501629030446014, "y"=>0.4866269873458793, "controller"=>"points", "action"=>"create", "point"=>{"company_id"=>5, "x"=>0.35501629030446014, "y"=>0.4866269873458793}} }[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mCompany Load (3.5ms)[0m  [1m[34mSELECT "companies".* FROM "companies" WHERE "companies"."id" = ? LIMIT ?[0m  [["id", 5], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mPoint Create (0.4ms)[0m  [1m[32mINSERT INTO "points" ("company_id", "x", "y", "what", "info", "emotion", "meaning", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["company_id", 5], ["x", 0.35501629030446014], ["y", 0.4866269873458793], ["what", nil], ["info", nil], ["emotion", nil], ["meaning", nil], ["created_at", "2026-09-13 06:45:29.287921"], ["updated_at", "2026-09-13 06:45:29.287921"]]
+  ↳ app/controllers/points_controller.rb:4:in `create'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/points_controller.rb:4:in `create'
+Completed 201 Created in 53ms (Views: 0.1ms | ActiveRecord: 4.3ms (2 queries, 0 cached) | GC: 29.9ms)
+
+
+Started PATCH "/points/30" for 127.0.0.1 at 2026-09-13 15:45:30 +0900
+Processing by PointsController#update as JSON
+  Parameters: {"x"=>0.35501629030446014, "y"=>0.4866269873458793, "id"=>"30", "point"=>{"x"=>0.35501629030446014, "y"=>0.4866269873458793}}
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" WHERE "points"."id" = ? LIMIT ?[0m  [["id", 30], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:12:in `update'
+[31mUnpermitted parameters: :id, :point. Context: { controller: PointsController, action: update, request: #<ActionDispatch::Request:0x000000010f020570>, params: {"x"=>0.35501629030446014, "y"=>0.4866269873458793, "controller"=>"points", "action"=>"update", "id"=>"30", "point"=>{"x"=>0.35501629030446014, "y"=>0.4866269873458793}} }[0m
+Completed 200 OK in 7ms (Views: 0.1ms | ActiveRecord: 0.1ms (1 query, 0 cached) | GC: 4.7ms)
+
+
+Started GET "/" for ::1 at 2026-09-13 15:45:52 +0900
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by MapController#show as */*
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.1ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 7.0ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 63.3ms | GC: 0.0ms)
+Completed 200 OK in 87ms (Views: 65.1ms | ActiveRecord: 1.6ms (2 queries, 0 cached) | GC: 0.6ms)
+
+
+Started GET "/" for ::1 at 2026-09-13 15:45:53 +0900
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.1ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 3.9ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 6.0ms | GC: 0.0ms)
+Completed 200 OK in 9ms (Views: 6.6ms | ActiveRecord: 0.1ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/manifest.json" for ::1 at 2026-09-13 15:45:53 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/manifest.json" for ::1 at 2026-09-13 15:45:53 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for 127.0.0.1 at 2026-09-13 15:48:00 +0900
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.5ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 7.3ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 41.5ms | GC: 0.0ms)
+Completed 200 OK in 69ms (Views: 43.2ms | ActiveRecord: 2.1ms (2 queries, 0 cached) | GC: 0.6ms)
+
+
+Started GET "/manifest.json" for 127.0.0.1 at 2026-09-13 15:48:00 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for ::1 at 2026-09-13 15:48:21 +0900
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by MapController#show as */*
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.1ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 6.3ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 72.8ms | GC: 0.0ms)
+Completed 200 OK in 95ms (Views: 74.5ms | ActiveRecord: 1.4ms (2 queries, 0 cached) | GC: 0.4ms)
+
+
+Started GET "/" for ::1 at 2026-09-13 15:49:47 +0900
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.2ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 2.6ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 39.5ms | GC: 13.2ms)
+Completed 200 OK in 42ms (Views: 39.7ms | ActiveRecord: 0.3ms (2 queries, 0 cached) | GC: 13.2ms)
+
+
+Started GET "/manifest.json" for ::1 at 2026-09-13 15:49:47 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/manifest.json" for ::1 at 2026-09-13 15:49:48 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for 127.0.0.1 at 2026-09-13 15:51:20 +0900
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.3ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 8.0ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 94.9ms | GC: 0.0ms)
+Completed 200 OK in 123ms (Views: 96.6ms | ActiveRecord: 2.0ms (2 queries, 0 cached) | GC: 0.6ms)
+
+
+Started GET "/manifest.json" for 127.0.0.1 at 2026-09-13 15:51:20 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/" for 127.0.0.1 at 2026-09-13 15:52:30 +0900
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by MapController#show as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering map/show.html.erb within layouts/application
+  [1m[36mCompany Load (0.1ms)[0m  [1m[34mSELECT "companies".* FROM "companies" ORDER BY "companies"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:3:in `map'
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" ORDER BY "points"."created_at" ASC[0m
+  ↳ app/views/map/show.html.erb:4:in `map'
+  Rendered map/show.html.erb within layouts/application (Duration: 7.2ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 39.7ms | GC: 0.0ms)
+Completed 200 OK in 67ms (Views: 41.6ms | ActiveRecord: 1.8ms (2 queries, 0 cached) | GC: 0.6ms)
+
+
+Started GET "/manifest.json" for 127.0.0.1 at 2026-09-13 15:52:31 +0900
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started PATCH "/points/17" for 127.0.0.1 at 2026-09-13 15:52:36 +0900
+Processing by PointsController#update as JSON
+  Parameters: {"x"=>0.9343051342545782, "y"=>0.6061381272982911, "id"=>"17", "point"=>{"x"=>0.9343051342545782, "y"=>0.6061381272982911}}
+  [1m[36mPoint Load (0.1ms)[0m  [1m[34mSELECT "points".* FROM "points" WHERE "points"."id" = ? LIMIT ?[0m  [["id", 17], ["LIMIT", 1]]
+  ↳ app/controllers/points_controller.rb:12:in `update'
+[31mUnpermitted parameters: :id, :point. Context: { controller: PointsController, action: update, request: #<ActionDispatch::Request:0x000000010af11b10>, params: {"x"=>0.9343051342545782, "y"=>0.6061381272982911, "controller"=>"points", "action"=>"update", "id"=>"17", "point"=>{"x"=>0.9343051342545782, "y"=>0.6061381272982911}} }[0m
+Completed 200 OK in 4ms (Views: 0.2ms | ActiveRecord: 0.1ms (1 query, 0 cached) | GC: 0.2ms)
+
+
