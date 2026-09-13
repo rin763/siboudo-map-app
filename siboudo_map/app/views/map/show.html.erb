@@ -1,0 +1,82 @@
+<div class="app"
+     data-controller="motivation-map"
+     data-motivation-map-companies-value="<%= @companies.map(&:as_json_for_client).to_json %>"
+     data-motivation-map-points-value="<%= @points.map(&:as_json_for_client).to_json %>">
+
+  <header class="top-bar">
+    <div class="brand">
+      <span class="brand-dot"></span>
+      <h1>軌跡</h1>
+      <span class="brand-en">Kiseki</span>
+    </div>
+    <div class="top-bar-right">
+      <span class="save-chip" data-motivation-map-target="saveState">
+        <span class="material-symbols-outlined">cloud_done</span>
+        <span>保存済み</span>
+      </span>
+      <span class="avatar"><span class="material-symbols-outlined">person</span></span>
+    </div>
+  </header>
+
+  <section class="intro">
+    <div class="intro-eyebrow">
+      <span class="eyebrow-label">Trajectory Cartography</span>
+      <span class="eyebrow-dot"></span>
+      <span class="eyebrow-sub">内省図譜</span>
+    </div>
+    <h2 class="intro-title">志望動機の変遷と感情の軌跡</h2>
+    <p class="intro-desc">
+      面談やOB訪問の前後で、志望度や気持ちはどう揺れ動いたか。志望企業に入った瞬間や順位が入れ替わった瞬間を言葉にして、自分の本音を紐解こう。
+    </p>
+  </section>
+
+  <p class="hint-card">
+    <span class="material-symbols-outlined">lightbulb</span>
+    <span>
+      まず企業を追加し、線を選んだ状態でグラフをクリックするとその企業の線にポイントが追加されます。
+      ポイントをクリックすると、出来事や感じたことを書き込めます。通常は<b>⑤ 今振り返ると、その感情は何を意味していたか</b>だけが点のそばに表示され、点にカーソルを合わせる（タップする）と②③④の詳細が表示されます。
+    </span>
+  </p>
+
+  <main>
+    <section class="company-legend">
+      <div class="company-bar" data-motivation-map-target="companyBar"></div>
+    </section>
+
+    <section class="graph-card">
+      <div class="graph-card-head">
+        <div class="graph-card-head-left">
+          <span class="material-symbols-outlined">flag</span>
+          <span>志望度・熱量変遷グラフ</span>
+        </div>
+        <div class="zoom-controls">
+          <button type="button" class="zoom-btn" data-action="motivation-map#zoomOut" title="横軸を縮める">
+            <span class="material-symbols-outlined">remove</span>
+          </button>
+          <span class="zoom-label" data-motivation-map-target="zoomLabel">100%</span>
+          <button type="button" class="zoom-btn" data-action="motivation-map#zoomIn" title="横軸を伸ばす">
+            <span class="material-symbols-outlined">add</span>
+          </button>
+        </div>
+      </div>
+      <p class="card-label">魅力度・志望順位のイメージ（上＝魅力を感じた／下＝魅力度が下がった）／横軸は伸縮・スクロールできます</p>
+
+      <div class="graph-scroll" data-motivation-map-target="graphScroll">
+        <div class="graph-stage" data-motivation-map-target="graphStage">
+          <svg data-motivation-map-target="graph" viewBox="0 0 1000 520" preserveAspectRatio="none" aria-label="志望度変遷のグラフ"></svg>
+          <div class="bubble-layer" data-motivation-map-target="bubbleLayer"></div>
+        </div>
+      </div>
+      <p class="graph-hint">選択中の企業の線にクリックでポイントを追加 ／ 点をドラッグで位置を調整 ／ 点をクリックで下のパネルを開く</p>
+    </section>
+
+    <section class="panel-section" data-motivation-map-target="panel">
+      <div class="panel">
+        <%# <div class="panel-empty">
+          まだ企業がありません。<br><br>
+          上の「＋企業を追加」から、比較したい企業を追加してください。
+        </div> %>
+      </div>
+    </section>
+  </main>
+</div>
