@@ -10,12 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_09_12_000002) do
+ActiveRecord::Schema[7.2].define(version: 2026_09_13_073712) do
   create_table "companies", force: :cascade do |t|
     t.string "name", null: false
     t.integer "color_index", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "owner_token"
+    t.index ["owner_token"], name: "index_companies_on_owner_token"
   end
 
   create_table "points", force: :cascade do |t|

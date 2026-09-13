@@ -1,6 +1,7 @@
 class PointsController < ApplicationController
   def create
-    point = Point.new(point_params)
+    company = owned_companies.find(point_params[:company_id])
+    point = company.points.new(point_params.except(:company_id))
     if point.save
       render json: point.as_json_for_client, status: :created
     else
@@ -9,7 +10,9 @@ class PointsController < ApplicationController
   end
 
   def update
-    point = Point.find(params[:id])
+    point = owned_points.find(params[:id])
+    # company_id を変更する場合も、変更先が自分の企業であることを確認する
+    owned_companies.find(point_params[:company_id]) if point_params[:company_id].present?
     if point.update(point_params)
       render json: point.as_json_for_client
     else
@@ -18,12 +21,20 @@ class PointsController < ApplicationController
   end
 
   def destroy
-    point = Point.find(params[:id])
+    point = owned_points.find(params[:id])
     point.destroy
     head :no_content
   end
 
   private
+
+  def owned_companies
+    Company.where(owner_token: current_owner_token)
+  end
+
+  def owned_points
+    Point.where(company_id: owned_companies.select(:id))
+  end
 
   # JSON で送るので params.require(:point) ではなく、
   # 送られてきたキーだけを許可する形にしている
