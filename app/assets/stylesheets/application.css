@@ -224,6 +224,28 @@ svg[data-motivation-map-target="graph"]{ display:block; touch-action:none; curso
 .close-btn{ background:none; border:none; color:var(--ink-faint); font-size:12.5px; cursor:pointer; padding:4px 6px; font-family:var(--font-sans); }
 .close-btn:hover{ color:var(--ink); }
 
+.panel-head-actions{ display:flex; align-items:center; gap:6px; flex:none; }
+.icon-btn{
+  display:flex; align-items:center; justify-content:center;
+  width:32px; height:32px; padding:0; border:none; border-radius:50%;
+  background:var(--surface-alt); color:var(--ink-soft);
+}
+.icon-btn .material-symbols-outlined{ font-size:20px; }
+.icon-btn.danger{ background:var(--danger); color:#fff; }
+.icon-btn.danger:hover{ background:var(--ink); }
+.icon-btn.danger.confirm-armed{ background:var(--primary); animation:confirm-armed-pulse 0.9s ease-in-out infinite; }
+@keyframes confirm-armed-pulse{
+  0%, 100%{ box-shadow:0 0 0 0 var(--primary-soft); }
+  50%{ box-shadow:0 0 0 6px var(--primary-soft); }
+}
+.icon-btn.with-label{
+  width:auto; height:auto; border-radius:var(--radius-sm);
+  padding:8px 14px; gap:6px; font-size:13px; font-weight:600; font-family:var(--font-sans);
+}
+.icon-btn.with-label .material-symbols-outlined{ font-size:18px; }
+
+.panel-footer{ display:flex; justify-content:center; margin-top:18px; padding-top:14px; }
+
 .field{ margin:20px 0; }
 .field-head{ display:flex; align-items:center; gap:8px; margin-bottom:8px; }
 .field .q-num{ font-family:var(--font-mono); font-size:13px; font-weight:700; color:var(--primary); }
@@ -268,8 +290,6 @@ button{ font-family:var(--font-sans); cursor:pointer; }
 .btn.primary.success{ background:var(--tertiary); border-color:var(--tertiary); }
 .btn.primary .material-symbols-outlined{ font-size:18px; }
 .btn:disabled{ cursor:default; opacity:0.9; }
-
-.panel-footer{ display:flex; justify-content:flex-end; margin-top:18px; padding-top:16px; border-top:1px solid #FFFFFF; }
 
 @media (max-width:640px){
   .app{ padding:0 14px 96px; }

@@ -5,7 +5,8 @@ import { Controller } from "@hotwired/stimulus"
 const PALETTE = [
   { main: "#293767", soft: "#E0E2E8" },
   { main: "#4A5EA3", soft: "#E5E7F4" },
-  { main: "#8B9EE0", soft: "#EDF0FA" }
+  { main: "#8B9EE0", soft: "#EDF0FA" },
+  { main: "#E7D6C9", soft: "#F5EEE9" }
 ]
 
 const COMPANIES_URL = "/companies"
@@ -13,7 +14,10 @@ const POINTS_URL = "/points"
 const SVG_NS = "http://www.w3.org/2000/svg"
 const W = 1000
 const H = 520
-const MARGIN = { top: 24, right: 30, bottom: 36, left: 50 }
+const MARGIN = { top: 24, right: 30, bottom: 48, left: 50 }
+// 横軸の目盛り。左から2本目の縦グリッド線から始めて、縦グリッド線4本ごとに1ヶ月ずつ進める
+const MONTH_TICK_START_MONTH = 4 // 大学3年4月から開始
+const MONTH_TICK_INTERVAL = 4 // 縦グリッド線何本ごとに目盛りを振るか
 const PLOT_W = W - MARGIN.left - MARGIN.right
 const PLOT_H = H - MARGIN.top - MARGIN.bottom
 
@@ -121,10 +125,10 @@ export default class extends Controller {
     return PALETTE[company.color_index % PALETTE.length]
   }
   // グラフ上では、選択中（activeCompanyId）の企業だけポイントカラー(#FE8769)で強調表示し、
-  // それ以外の企業の線・点・企業名は#4A5EA3で控えめに表示する
+  // それ以外の企業は PALETTE から企業ごとに割り当てられた固有の色で表示する
   graphColorFor(company){
     if(company.id === this.activeCompanyId) return { main: "#FE8769", soft: "#FE87691a" }
-    return { main: "#4A5EA3", soft: "#4A5EA31a" }
+    return this.colorFor(company)
   }
   companyOf(pt){
     return this.companies.find(c => c.id === pt.company_id)
@@ -317,9 +321,21 @@ export default class extends Controller {
     const bottom = this.svgEl("text", { x: bottomX, y: bottomY, "text-anchor": "end", class: "point-tagline", transform: this.unstretchTransform(bottomX, bottomY, stretch) })
     bottom.textContent = "低"; svg.appendChild(bottom)
 
-    const timeX = W - MARGIN.right, timeY = H - MARGIN.bottom + 22
+    const timeX = W - MARGIN.right, timeY = H - MARGIN.bottom + 32
     const timeLabel = this.svgEl("text", { x: timeX, y: timeY, "text-anchor": "end", class: "point-tagline", transform: this.unstretchTransform(timeX, timeY, stretch) })
     timeLabel.textContent = "時間の流れ →"; svg.appendChild(timeLabel)
+
+    // 横軸の月目盛り：2本目の縦グリッド線（i=1）から、縦グリッド線 MONTH_TICK_INTERVAL 本ごとに1つ
+    let monthTickCount = 0
+    for(let i = 1; i < V_LINES; i += MONTH_TICK_INTERVAL){
+      const month = ((MONTH_TICK_START_MONTH - 1 + monthTickCount) % 12) + 1
+      const tx = MARGIN.left + (PLOT_W * i) / (V_LINES - 1)
+      const ty = H - MARGIN.bottom + 16
+      const tick = this.svgEl("text", { x: tx, y: ty, "text-anchor": "middle", class: "point-tagline", transform: this.unstretchTransform(tx, ty, stretch) })
+      tick.textContent = `${month}月`
+      svg.appendChild(tick)
+      monthTickCount++
+    }
 
     this.companies.forEach(company => {
       const color = this.graphColorFor(company)
@@ -544,13 +560,12 @@ export default class extends Controller {
     if(!pt){
       panel.innerHTML = this.companies.length
         ? `<div class="panel"><div class="panel-empty">
-             上の企業チップを選び、グラフをクリックするとその企業の線にポイントが追加されます。<br><br>
-             追加したポイントをクリックすると、ここに②〜⑤の質問が表示されます（②〜④はグラフ上の付箋にも反映されます）。
+             上の企業チップを選び、図面をクリックするとその企業のグラフにポイントが追加されます。<br><br>
+             追加したポイントをクリックすると、ここに質問が表示されます。
            </div></div>`
         : `<div class="panel"><div class="panel-empty">
-             まだ企業がありません。<br><br>
-             上の「＋企業を追加」から、比較したい企業を追加してください。企業ごとに色分けされた線で、順位や魅力度の推移を描けます。<br><br>
-             「今の第一志望群でなくても、魅力を感じていたが辞退した会社」を追加しても構いません。
+             まだ企業がありません。<br>
+             上の「＋企業を追加」から、比較したい企業を追加してください。<br>
            </div></div>`
       return
     }
@@ -567,7 +582,12 @@ export default class extends Controller {
             <span class="focus-badge">FOCUS</span>
             <h2><span class="idx" style="background:${color.main}">${idx}</span>${this.escapeHtml(company ? company.name : "")}</h2>
           </div>
-          <button type="button" class="close-btn" data-role="close">閉じる</button>
+          <div class="panel-head-actions">
+            <button type="button" class="icon-btn danger with-label" data-role="delete" title="このポイントを削除">
+              <span class="material-symbols-outlined">delete</span>
+              <span>ポイントを削除する</span>
+            </button>
+          </div>
         </div>
 
         <div class="field field-select-row">
@@ -622,7 +642,7 @@ export default class extends Controller {
         </div>
 
         <div class="panel-footer">
-          <button type="button" class="btn danger" data-role="delete">このポイントを削除</button>
+          <button type="button" class="close-btn" data-role="close">閉じる</button>
         </div>
       </div>
     `
@@ -632,8 +652,26 @@ export default class extends Controller {
       this.renderGraph()
       this.renderPanel()
     })
-    panel.querySelector('[data-role="delete"]').addEventListener("click", () => {
-      if(confirm("このポイントを削除しますか？")) this.deletePoint(pt.id)
+    // window.confirm() は連続で呼ぶとブラウザに抑制され、以降クリックしても
+    // 何も起きなくなることがあるため、ボタン自体で2段階確認する方式にしている
+    const deleteBtn = panel.querySelector('[data-role="delete"]')
+    const deleteBtnOriginalHTML = deleteBtn.innerHTML
+    deleteBtn.addEventListener("click", (e) => {
+      const btn = e.currentTarget
+      if(btn.dataset.armed === "1"){
+        clearTimeout(this.deleteArmTimer)
+        this.deletePoint(pt.id)
+        return
+      }
+      btn.dataset.armed = "1"
+      btn.classList.add("confirm-armed")
+      btn.innerHTML = '<span class="material-symbols-outlined">warning</span><span>本当に削除する</span>'
+      clearTimeout(this.deleteArmTimer)
+      this.deleteArmTimer = setTimeout(() => {
+        btn.dataset.armed = "0"
+        btn.classList.remove("confirm-armed")
+        btn.innerHTML = deleteBtnOriginalHTML
+      }, 3000)
     })
     panel.querySelector('[data-role="company"]').addEventListener("change", (e) => {
       pt.company_id = Number(e.target.value)

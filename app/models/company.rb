@@ -8,7 +8,8 @@ class Company < ApplicationRecord
   PALETTE = [
     { main: "#293767", soft: "#E0E2E8" },
     { main: "#4A5EA3", soft: "#E5E7F4" },
-    { main: "#8B9EE0", soft: "#EDF0FA" }
+    { main: "#8B9EE0", soft: "#EDF0FA" },
+    { main: "#E7D6C9", soft: "#F5EEE9" }
   ].freeze
 
   before_create :assign_color_index
