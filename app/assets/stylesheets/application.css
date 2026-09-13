@@ -21,9 +21,9 @@
   --radius:4px;
   --radius-sm:2px;
 
-  --font-serif:"Noto Serif JP", "Noto Serif", serif;
-  --font-sans:"Noto Sans JP", "Noto Sans", -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Hiragino Sans", sans-serif;
-  --font-mono:"JetBrains Mono", monospace;
+  --font-serif:"Noto Sans JP", sans-serif;
+  --font-sans:"Noto Sans JP", sans-serif;
+  --font-mono:"Noto Sans JP", sans-serif;
 }
 *{ box-sizing:border-box; }
 html,body{
