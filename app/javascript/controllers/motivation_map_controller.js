@@ -332,7 +332,8 @@ export default class extends Controller {
       const tx = MARGIN.left + (PLOT_W * i) / (V_LINES - 1)
       const ty = H - MARGIN.bottom + 16
       const tick = this.svgEl("text", { x: tx, y: ty, "text-anchor": "middle", class: "point-tagline", transform: this.unstretchTransform(tx, ty, stretch) })
-      tick.textContent = `${month}月`
+      // 一番左の目盛りだけ「大学3年4月」のように学年も添える
+      tick.textContent = monthTickCount === 0 ? `大学3年${month}月` : `${month}月`
       svg.appendChild(tick)
       monthTickCount++
     }

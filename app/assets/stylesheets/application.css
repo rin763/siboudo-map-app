@@ -81,6 +81,21 @@ header.top-bar{
 
 main{ display:flex; flex-direction:column; gap:18px; }
 
+/* PCなど横幅に余裕がある画面では、グラフとパネルを 3:2 で横並びにする */
+@media (min-width:1024px){
+  main{
+    display:grid;
+    grid-template-columns:3fr 2fr;
+    grid-template-rows:auto 1fr;
+    column-gap:18px; row-gap:18px;
+    align-items:stretch;
+  }
+  .company-legend{ grid-column:1; grid-row:1; }
+  .graph-card{ grid-column:1; grid-row:2; }
+  .panel-section{ grid-column:2; grid-row:1 / 3; }
+  .panel-section .panel{ height:100%; }
+}
+
 /* ---- company legend ---- */
 .company-legend{ margin-top:0; }
 .company-bar{
