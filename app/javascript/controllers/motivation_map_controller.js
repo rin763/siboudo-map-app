@@ -20,6 +20,8 @@ const MONTH_TICK_START_MONTH = 4 // 大学3年4月から開始
 const MONTH_TICK_INTERVAL = 4 // 縦グリッド線何本ごとに目盛りを振るか
 const PLOT_W = W - MARGIN.left - MARGIN.right
 const PLOT_H = H - MARGIN.top - MARGIN.bottom
+const V_LINES = 40
+const H_LINES = 10
 
 const ZOOM_MIN = 0.5
 const ZOOM_MAX = 3
@@ -41,7 +43,11 @@ export default class extends Controller {
     this.dragMoved = false
     this.xZoom = 1
 
-    this.onResize = () => this.renderGraph()
+    // resize は連続で発火するので、renderGraph() の呼びすぎを避けるために間引く
+    this.onResize = () => {
+      clearTimeout(this.resizeDebounceTimer)
+      this.resizeDebounceTimer = setTimeout(() => this.renderGraph(), 100)
+    }
     window.addEventListener("resize", this.onResize)
 
     // 横に伸びたグラフは、縦方向のホイール操作でも横スクロールできるようにする
@@ -106,8 +112,10 @@ export default class extends Controller {
     let y = 1 - (py - MARGIN.top) / PLOT_H
     return { x: Math.min(1, Math.max(0, x)), y: Math.min(1, Math.max(0, y)) }
   }
-  clientToSvgPoint(evt){
-    const rect = this.graphTarget.getBoundingClientRect()
+  clientToSvgPoint(evt, rect){
+    // rect を渡さない場合は毎回 getBoundingClientRect() を読むので、
+    // 連続で呼ぶ処理（ドラッグ中など）では事前に取得した rect を渡して強制レイアウトを避ける
+    rect = rect || this.graphTarget.getBoundingClientRect()
     return {
       px: (evt.clientX - rect.left) * (W / rect.width),
       py: (evt.clientY - rect.top) * (H / rect.height)
@@ -276,43 +284,61 @@ export default class extends Controller {
     return `translate(${px} ${py}) scale(${1 / stretch} 1) translate(${-px} ${-py})`
   }
 
-  renderGraph(){
-    this.applyGraphSize()
+  // グリッド線・太字の軸線は、ズームやデータが変わっても座標（viewBox上の位置）が
+  // 一切変わらない「静止したチラシの罫線」のようなものなので、初回だけ作って使い回す。
+  // renderGraph() のたびに49本ぶん作り直していたのをやめて軽くしている。
+  ensureStaticGrid(){
+    if(this.staticGridEl) return
     const svg = this.graphTarget
-    svg.innerHTML = ""
-    const rendered = []
-    const stretch = this.stretchRatio()
+    const grid = this.svgEl("g", { class: "static-grid" })
 
-    // ---- 細いグリッド（グラフ本体と一緒に伸縮する） ----
-    const V_LINES = 40
-    const H_LINES = 10
     for(let i = 1; i < V_LINES; i++){
       const gx = MARGIN.left + (PLOT_W * i) / (V_LINES - 1)
-      svg.appendChild(this.svgEl("line", {
+      grid.appendChild(this.svgEl("line", {
         x1: gx, y1: MARGIN.top, x2: gx, y2: H - MARGIN.bottom,
         stroke: "var(--border)", "stroke-width": 1
       }))
     }
     for(let i = 0; i < H_LINES - 1; i++){
       const gy = MARGIN.top + (PLOT_H * i) / (H_LINES - 1)
-      svg.appendChild(this.svgEl("line", {
+      grid.appendChild(this.svgEl("line", {
         x1: MARGIN.left, y1: gy, x2: W - MARGIN.right, y2: gy,
         stroke: "var(--border)", "stroke-width": 1
       }))
     }
 
-    // ---- 太字の軸線（左の縦軸・下の横軸）は伸縮の影響を受けないよう管理する ----
     // vector-effect="non-scaling-stroke" で、線の太さが横方向の伸縮で変わらないようにする
-    svg.appendChild(this.svgEl("line", {
+    grid.appendChild(this.svgEl("line", {
       x1: MARGIN.left, y1: MARGIN.top, x2: MARGIN.left, y2: H - MARGIN.bottom,
       stroke: "var(--ink-faint)", "stroke-width": 2, "vector-effect": "non-scaling-stroke"
     }))
-    svg.appendChild(this.svgEl("line", {
+    grid.appendChild(this.svgEl("line", {
       x1: MARGIN.left, y1: H - MARGIN.bottom, x2: W - MARGIN.right, y2: H - MARGIN.bottom,
       stroke: "var(--ink-faint)", "stroke-width": 2, "vector-effect": "non-scaling-stroke"
     }))
 
-    // ---- 軸ラベルの文字も伸縮の影響を受けないよう補正する ----
+    svg.appendChild(grid)
+    this.staticGridEl = grid
+
+    // 動的な内容（企業の線・点・軸ラベルの文字）を入れる層。renderGraph() のたびに
+    // ここだけクリアして作り直す（静的グリッドは触らない）
+    this.dynamicLayerEl = this.svgEl("g", { class: "dynamic-layer" })
+    svg.appendChild(this.dynamicLayerEl)
+  }
+
+  renderGraph(){
+    this.applyGraphSize()
+    this.ensureStaticGrid()
+    const svg = this.dynamicLayerEl
+    svg.innerHTML = ""
+    const rendered = []
+    const stretch = this.stretchRatio()
+    // ドラッグ中に毎回 renderGraph() を呼ばず、動かしている点だけを軽量に更新できるよう
+    // 点・企業の線の要素を覚えておく（updateDraggedPointVisual で使う）
+    this.pointNodes = new Map()
+    this.companyPathNodes = new Map()
+
+    // ---- 軸ラベルの文字は伸縮の影響を受けないよう補正する（ズームで毎回変わるので動的層に入れる） ----
     const topX = MARGIN.left - 8, topY = MARGIN.top + 10
     const top = this.svgEl("text", { x: topX, y: topY, "text-anchor": "end", class: "point-tagline", transform: this.unstretchTransform(topX, topY, stretch) })
     top.textContent = "高"; svg.appendChild(top)
@@ -342,13 +368,16 @@ export default class extends Controller {
       const color = this.graphColorFor(company)
       const sorted = this.points.filter(p => p.company_id === company.id).sort((a, b) => a.x - b.x)
 
+      let pathEl = null
       if(sorted.length > 1){
         const d = sorted.map((pt, i) => {
           const { px, py } = this.toPx(pt.x, pt.y)
           return (i === 0 ? "M" : "L") + px.toFixed(1) + "," + py.toFixed(1)
         }).join(" ")
-        svg.appendChild(this.svgEl("path", { d, fill: "none", stroke: color.main, "stroke-width": "2.2", "stroke-linecap": "round" }))
+        pathEl = this.svgEl("path", { d, fill: "none", stroke: color.main, "stroke-width": "2.2", "stroke-linecap": "round" })
+        svg.appendChild(pathEl)
       }
+      this.companyPathNodes.set(company.id, { pathEl, sorted })
 
       sorted.forEach((pt, i) => {
         const { px, py } = this.toPx(pt.x, pt.y)
@@ -359,11 +388,13 @@ export default class extends Controller {
 
         // preserveAspectRatio="none" で横方向だけ縮尺が変わるため、
         // 円が横に伸びて見えないよう rx を横方向の伸縮率で逆補正した楕円で描く
+        let haloEl = null
         if(this.selectedId === pt.id){
-          svg.appendChild(this.svgEl("ellipse", {
+          haloEl = this.svgEl("ellipse", {
             cx: px, cy: py, rx: 20 / stretch, ry: 20, class: "point-halo",
             fill: color.main, "fill-opacity": 0.12
-          }))
+          })
+          svg.appendChild(haloEl)
         }
 
         const circle = this.svgEl("ellipse", {
@@ -385,6 +416,7 @@ export default class extends Controller {
         num.style.pointerEvents = "none"
         svg.appendChild(num)
 
+        this.pointNodes.set(pt.id, { circle, num, haloEl })
         rendered.push({ pt, company, color, px, py, order: i })
       })
 
@@ -404,7 +436,9 @@ export default class extends Controller {
       }
     })
 
-    svg.onclick = (evt) => {
+    // クリックでの点追加は、動的レイヤーだけでなくグリッド部分など
+    // グラフ全体のどこをクリックしても反応させたいので、外側の <svg> 自体に付ける
+    this.graphTarget.onclick = (evt) => {
       if(evt.target.closest && evt.target.closest(".point-circle")) return
       if(this.dragMoved){ this.dragMoved = false; return }
       if(!this.activeCompanyId){
@@ -494,21 +528,82 @@ export default class extends Controller {
     this.renderGraph()
     this.renderPanel()
 
+    // ドラッグ中は pointermove のたびに renderGraph()（グラフ全体の作り直し）は呼ばず、
+    // 動かしている点まわりの要素だけを直接書き換える。これで高頻度に発火する
+    // pointermove でも重くならない。グラフ全体との整合（番号の振り直しなど）は
+    // ドラッグが終わったタイミング（onUp）で一度だけ renderGraph() して揃える。
+    const rect = this.graphTarget.getBoundingClientRect()
     const onMove = (mv) => {
-      const { px, py } = this.clientToSvgPoint(mv)
+      const { px, py } = this.clientToSvgPoint(mv, rect)
       const { x, y } = this.fromPx(px, py)
       const pt = this.points.find(p => p.id === id)
-      if(pt){ pt.x = x; pt.y = y; this.dragMoved = true; this.renderGraph() }
+      if(pt){
+        pt.x = x; pt.y = y; this.dragMoved = true
+        this.updateDraggedPointVisual(pt, rect)
+      }
     }
+    // pointerup だけでなく pointercancel（タッチのスクロール割り込みや、別ウィンドウへの
+    // フォーカス移動などでブラウザ側からドラッグが中断された場合）でも必ず後片付けする。
+    // ここを pointerup だけにしていると、中断のたびに古い pointermove リスナーが
+    // document に残り続け、ドラッグしていない時でもマウスを動かすたびにそれらが
+    // 全部動いてしまい、使うほどにどんどん重くなる原因になる。
     const onUp = () => {
       document.removeEventListener("pointermove", onMove)
       document.removeEventListener("pointerup", onUp)
+      document.removeEventListener("pointercancel", onUp)
       const pt = this.points.find(p => p.id === id)
-      if(pt) this.persistPoint(pt.id, { x: pt.x, y: pt.y })
+      if(pt){
+        this.renderGraph()
+        this.persistPoint(pt.id, { x: pt.x, y: pt.y })
+      }
       setTimeout(() => { this.dragMoved = false }, 0)
     }
     document.addEventListener("pointermove", onMove)
     document.addEventListener("pointerup", onUp)
+    document.addEventListener("pointercancel", onUp)
+  }
+
+  // ドラッグ中に呼ばれる軽量版の更新。renderGraph() のようにDOMを作り直さず、
+  // 該当の点・企業の線・吹き出しの位置だけを直接書き換える。
+  updateDraggedPointVisual(pt, rect){
+    const stretch = this.stretchRatio()
+    const { px, py } = this.toPx(pt.x, pt.y)
+
+    const nodes = this.pointNodes.get(pt.id)
+    if(nodes){
+      nodes.circle.setAttribute("cx", px)
+      nodes.circle.setAttribute("cy", py)
+      if(nodes.haloEl){
+        nodes.haloEl.setAttribute("cx", px)
+        nodes.haloEl.setAttribute("cy", py)
+      }
+      if(nodes.num){
+        nodes.num.setAttribute("x", px)
+        nodes.num.setAttribute("y", py + 0.5)
+        nodes.num.setAttribute("transform", this.unstretchTransform(px, py, stretch))
+      }
+    }
+
+    const companyNodes = this.companyPathNodes.get(pt.company_id)
+    if(companyNodes && companyNodes.pathEl){
+      const d = companyNodes.sorted.map((p, i) => {
+        const c = this.toPx(p.x, p.y)
+        return (i === 0 ? "M" : "L") + c.px.toFixed(1) + "," + c.py.toFixed(1)
+      }).join(" ")
+      companyNodes.pathEl.setAttribute("d", d)
+    }
+
+    const bubble = this.bubbleLayerTarget.querySelector(`[data-point-id="${pt.id}"]`)
+    if(bubble){
+      const scaleX = rect.width / W
+      const bubbleWidth = 184
+      const halfW = bubbleWidth / 2
+      const screenX = px * scaleX
+      const screenY = py * (rect.height / H)
+      const left = Math.max(halfW + 4, Math.min(rect.width - halfW - 4, screenX))
+      bubble.style.left = `${left}px`
+      bubble.style.top = `${screenY}px`
+    }
   }
 
   async addPoint(x, y){
